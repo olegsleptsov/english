@@ -1,0 +1,98 @@
+.headerInfoButton,
+.headerSpacer {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+}
+
+.headerInfoButton {
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid #c9d3dc;
+  border-radius: 999px;
+  color: #2f6f73;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.headerInfoButton:focus-visible {
+  outline: 3px solid #8bd3dd;
+  outline-offset: 2px;
+}
+
+.headerInfoButton:active {
+  transform: translateY(1px);
+}
+
+.sheetRoot :global(.g-sheet__sheet-scroll-container) {
+  border-radius: 18px 18px 0 0;
+  background: #ffffff;
+  box-shadow: 0 -24px 48px rgb(23 32 38 / 18%);
+}
+
+.sheetContent {
+  display: grid;
+  gap: 14px;
+  padding: 18px 18px 24px;
+  color: #51606d;
+  line-height: 1.55;
+}
+
+.sheetContent :global(.g-sheet__sheet-content-title) {
+  padding: 0 0 4px;
+  color: #172026;
+  font-size: 1.25rem;
+  font-weight: 760;
+  letter-spacing: 0;
+  line-height: 1.25;
+  text-align: left;
+  white-space: normal;
+}
+
+.sheetContent p {
+  margin: 0;
+}
+
+.topicBlock {
+  display: grid;
+  gap: 10px;
+}
+
+.topicTitle {
+  margin: 0;
+  color: #172026;
+  font-size: 0.78rem;
+  font-weight: 780;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.topicList {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.topicItem {
+  padding: 12px;
+  border: 1px solid #d8e0e7;
+  border-radius: 8px;
+  color: #384753;
+  background: #f8fafb;
+}
+
+@media (min-width: 720px) {
+  .sheetRoot :global(.g-sheet__sheet) {
+    width: min(720px, calc(100% - 48px));
+    inset-inline-start: max(24px, calc((100% - 720px) / 2));
+  }
+
+  .sheetRoot :global(.g-sheet__sheet-scroll-container) {
+    border-radius: 18px;
+  }
+}

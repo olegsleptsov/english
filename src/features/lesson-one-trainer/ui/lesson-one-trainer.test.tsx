@@ -30,20 +30,4 @@ describe('LessonOneTrainer', () => {
 
     expect(await screen.findByText('Ты имеешь')).toBeInTheDocument();
   });
-
-  it('opens lesson details in a bottom sheet', async () => {
-    const user = userEvent.setup();
-
-    renderWithProviders(<LessonOneTrainer />);
-
-    await user.click(
-      await screen.findByRole('button', {
-        name: 'Открыть информацию об уроке',
-      }),
-    );
-
-    expect(
-      screen.getByRole('dialog', { name: 'Урок 1: базовая таблица глагола' }),
-    ).toBeInTheDocument();
-  });
 });

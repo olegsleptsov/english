@@ -3,10 +3,11 @@
   display: grid;
   width: min(100%, 680px);
   min-height: calc(100dvh - 188px);
-  align-content: center;
-  gap: 18px;
+  align-content: start;
+  justify-items: center;
+  gap: 16px;
   margin: 0 auto;
-  padding: 20px 0 32px;
+  padding: 8px 0 32px;
 }
 
 .emptyCard {
@@ -18,25 +19,6 @@
   background: #ffffff;
 }
 
-.infoButton {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: inline-grid;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border: 1px solid #c9d3dc;
-  border-radius: 999px;
-  color: #2f6f73;
-  background: #ffffff;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.infoButton:focus-visible,
 .submitButton:focus-visible,
 .input:focus-visible {
   outline: 3px solid #8bd3dd;
@@ -45,17 +27,18 @@
 
 .form {
   display: grid;
-  gap: 16px;
+  width: 100%;
+  gap: 14px;
 }
 
 .prompt {
   margin: 0;
-  padding-right: 48px;
   color: #172026;
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   font-weight: 780;
   letter-spacing: 0;
   line-height: 1.08;
+  text-align: center;
 }
 
 .label {
@@ -85,17 +68,42 @@
   font-weight: 760;
 }
 
-.submitButton:active,
-.infoButton:active {
+.submitButton:active {
   transform: translateY(1px);
 }
 
+.feedbackSlot {
+  display: grid;
+  width: 100%;
+  min-height: 96px;
+  align-items: start;
+}
+
 .feedback {
+  position: relative;
   display: grid;
   gap: 6px;
+  min-height: 78px;
   padding: 14px;
   border-radius: 8px;
+  overflow: hidden;
   line-height: 1.35;
+  animation: feedbackReveal 440ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: top center;
+}
+
+.feedback::after {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 26%, rgb(255 255 255 / 72%) 0 2px, transparent 3px),
+    radial-gradient(circle at 82% 34%, rgb(255 255 255 / 64%) 0 2px, transparent 3px),
+    linear-gradient(110deg, transparent 0 34%, rgb(255 255 255 / 42%) 46%, transparent 58%);
+  content: '';
+  opacity: 0;
+  transform: translateX(-28%);
+  animation: feedbackShine 700ms 80ms ease-out both;
+  pointer-events: none;
 }
 
 .feedback span {
@@ -125,77 +133,53 @@
   text-underline-offset: 3px;
 }
 
-.sheetRoot :global(.g-sheet__sheet-scroll-container) {
-  border-radius: 18px 18px 0 0;
-  background: #ffffff;
-  box-shadow: 0 -24px 48px rgb(23 32 38 / 18%);
-}
-
-.sheetContent {
-  display: grid;
-  gap: 14px;
-  padding: 18px 18px 24px;
-  color: #51606d;
-  line-height: 1.55;
-}
-
-.sheetContent :global(.g-sheet__sheet-content-title) {
-  padding: 0 0 4px;
-  color: #172026;
-  font-size: 1.25rem;
-  font-weight: 760;
-  letter-spacing: 0;
-  line-height: 1.25;
-  text-align: left;
-  white-space: normal;
-}
-
-.sheetContent p {
-  margin: 0;
-}
-
-.sheetList {
-  display: grid;
-  gap: 12px;
-  margin: 0;
-}
-
-.sheetList div {
-  display: grid;
-  gap: 4px;
-  padding: 12px;
-  border: 1px solid #d8e0e7;
-  border-radius: 8px;
-  background: #f8fafb;
-}
-
-.sheetList dt {
-  color: #172026;
-  font-size: 0.78rem;
-  font-weight: 780;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.sheetList dd {
-  margin: 0;
-}
-
 @media (min-width: 720px) {
   .card {
     min-height: calc(100dvh - 220px);
+    padding-top: 28px;
   }
 
   .prompt {
-    font-size: 3.5rem;
+    font-size: 3.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback,
+  .feedback::after {
+    animation: none;
+  }
+}
+
+@keyframes feedbackReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
   }
 
-  .sheetRoot :global(.g-sheet__sheet) {
-    width: min(720px, calc(100% - 48px));
-    inset-inline-start: max(24px, calc((100% - 720px) / 2));
+  58% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.01);
   }
 
-  .sheetRoot :global(.g-sheet__sheet-scroll-container) {
-    border-radius: 18px;
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes feedbackShine {
+  0% {
+    opacity: 0;
+    transform: translateX(-30%);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(36%);
   }
 }

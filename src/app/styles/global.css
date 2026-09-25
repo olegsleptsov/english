@@ -56,20 +56,12 @@ input {
   backdrop-filter: blur(14px);
 }
 
-.app-header__brand,
 .app-header__action {
   min-height: 40px;
   display: inline-flex;
   align-items: center;
   border-radius: 8px;
   text-decoration: none;
-}
-
-.app-header__brand {
-  min-width: 0;
-  color: #172026;
-  font-size: 1.125rem;
-  font-weight: 760;
 }
 
 .app-header__action {

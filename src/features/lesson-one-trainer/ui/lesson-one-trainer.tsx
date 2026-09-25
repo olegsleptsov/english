@@ -1,5 +1,4 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { Sheet } from '@gravity-ui/uikit';
 import { Link } from 'react-router-dom';
 
 import { verbsApi, type VerbWithLearningStatus } from '@/entities/verb';
@@ -20,7 +19,6 @@ export function LessonOneTrainer() {
   const [taskIndex, setTaskIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [answerStatus, setAnswerStatus] = useState<AnswerStatus>('idle');
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -96,15 +94,6 @@ export function LessonOneTrainer() {
 
   return (
     <section className={styles.card} aria-label="Тренажер урока 1">
-      <button
-        aria-label="Открыть информацию об уроке"
-        className={styles.infoButton}
-        type="button"
-        onClick={() => setIsInfoOpen(true)}
-      >
-        i
-      </button>
-
       <form className={styles.form} onSubmit={handleSubmit}>
         <p className={styles.prompt}>{task.prompt}</p>
         <label className={styles.label} htmlFor="lesson-one-answer">
@@ -127,76 +116,23 @@ export function LessonOneTrainer() {
         </button>
       </form>
 
-      {answerStatus !== 'idle' ? (
-        <div
-          className={
-            answerStatus === 'correct'
-              ? `${styles.feedback} ${styles.feedbackCorrect}`
-              : `${styles.feedback} ${styles.feedbackIncorrect}`
-          }
-          role="status"
-        >
-          <span>{answerStatus === 'correct' ? 'Верно' : 'Правильный ответ'}</span>
-          <strong>{task.expectedAnswer}</strong>
-        </div>
-      ) : null}
-
-      <LessonOneInfoSheet
-        isOpen={isInfoOpen}
-        practiceVerbCount={verbs.length}
-        onClose={() => setIsInfoOpen(false)}
-      />
+      <div className={styles.feedbackSlot} aria-live="polite">
+        {answerStatus !== 'idle' ? (
+          <div
+            className={
+              answerStatus === 'correct'
+                ? `${styles.feedback} ${styles.feedbackCorrect}`
+                : `${styles.feedback} ${styles.feedbackIncorrect}`
+            }
+            role="status"
+          >
+            <span>
+              {answerStatus === 'correct' ? 'Верно' : 'Правильный ответ'}
+            </span>
+            <strong>{task.expectedAnswer}</strong>
+          </div>
+        ) : null}
+      </div>
     </section>
-  );
-}
-
-type LessonOneInfoSheetProps = {
-  isOpen: boolean;
-  practiceVerbCount: number;
-  onClose: () => void;
-};
-
-function LessonOneInfoSheet({
-  isOpen,
-  practiceVerbCount,
-  onClose,
-}: LessonOneInfoSheetProps) {
-  return (
-    <Sheet
-      className={styles.sheetRoot}
-      contentClassName={styles.sheetContent}
-      hideTopBar
-      title="Урок 1: базовая таблица глагола"
-      visible={isOpen}
-      onClose={onClose}
-    >
-      <p>
-        Главная цель первого урока — довести до автоматизма простую схему
-        английского предложения: кто делает действие и какой глагол нужно
-        поставить.
-      </p>
-      <p>
-        Сейчас тренажер показывает короткую русскую фразу в настоящем времени.
-        Введите английский перевод и отправьте форму. После этого появится
-        правильный ответ, а следующий Enter откроет новую фразу.
-      </p>
-      <dl className={styles.sheetList}>
-        <div>
-          <dt>Текущий режим</dt>
-          <dd>утверждения, вопросы и отрицания в Present Simple</dd>
-        </div>
-        <div>
-          <dt>Доступно глаголов</dt>
-          <dd>{practiceVerbCount}</dd>
-        </div>
-        <div>
-          <dt>Словарь</dt>
-          <dd>
-            Глаголы, отмеченные выученными, не попадают в задания. Вернуть слово
-            в тренировку можно повторным нажатием в словаре.
-          </dd>
-        </div>
-      </dl>
-    </Sheet>
   );
 }
