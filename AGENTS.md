@@ -6,6 +6,7 @@ These notes are a working draft for future agent instructions. Treat them as pro
 
 - The app is frontend-only: React, TypeScript, Vite.
 - The architecture style is Feature-Sliced Design.
+- UI work is mobile first. Design, implement, and test the mobile layout before expanding to desktop.
 - Avoid adding a backend, server runtime, database, or network API layer unless explicitly requested.
 - Use `localStorage` as a temporary persistence backend only through isolated adapters. Do not access it directly from UI components.
 - Design future data calls as async request-like contracts so replacing `localStorage` with a real backend later is straightforward.
@@ -17,6 +18,13 @@ These notes are a working draft for future agent instructions. Treat them as pro
 - Prefer small pure functions for domain behavior and test them directly.
 - Keep UI components focused on rendering and user interactions.
 - Do not introduce broad abstractions until duplication or cross-layer boundaries make them useful.
+
+## UI Principles
+
+- Mobile is the primary target. Start with small screens and add desktop refinements with media queries.
+- Keep navigation reachable and readable on narrow screens.
+- Do not let text overflow controls, tabs, cards, or lesson layouts.
+- Desktop layouts should enhance the mobile structure instead of becoming a separate experience.
 
 ## Testing Principles
 

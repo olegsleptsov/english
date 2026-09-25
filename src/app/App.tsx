@@ -1,7 +1,11 @@
-import { HomePage } from '@/pages/home';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+
+import { appRoutes } from './router/routes';
 
 import './styles/global.css';
 
+const router = createBrowserRouter(appRoutes);
+
 export function App() {
-  return <HomePage />;
+  return <RouterProvider router={router} />;
 }

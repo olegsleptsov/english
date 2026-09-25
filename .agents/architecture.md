@@ -20,3 +20,9 @@ Use FSD as the default structure:
 ## Current Scope
 
 This is an only-frontend app. Do not add backend code. Persistence will initially use `localStorage` behind request-like adapters.
+
+## Mobile First
+
+- Treat mobile as the primary product surface.
+- Build base styles for narrow screens first, then use wider breakpoints for desktop enhancements.
+- Keep routes and navigation usable without relying on hover, large screens, or dense desktop-only layouts.
