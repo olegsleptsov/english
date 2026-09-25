@@ -24,6 +24,7 @@ These notes are a working draft for future agent instructions. Treat them as pro
 ## UI Principles
 
 - Mobile is the primary target. Start with small screens and add desktop refinements with media queries.
+- Use CSS Modules for component and slice styles. Keep global CSS only for reset, app shell, typography defaults, and truly shared primitives.
 - Keep navigation reachable and readable on narrow screens.
 - Do not let text overflow controls, tabs, cards, or lesson layouts.
 - Desktop layouts should enhance the mobile structure instead of becoming a separate experience.

@@ -17,13 +17,16 @@ describe('app routes', () => {
     renderWithProviders(<RouterProvider router={router} />);
 
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Lesson 1' }),
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Базовая таблица глагола',
+      }),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('link', { name: 'Dictionary' }));
 
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Dictionary' }),
+      await screen.findByRole('list', { name: 'English verbs dictionary' }),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('link', { name: 'Lesson 16' }));

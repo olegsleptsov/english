@@ -28,6 +28,10 @@ button {
   font: inherit;
 }
 
+input {
+  font: inherit;
+}
+
 .app-layout {
   display: grid;
   min-height: 100dvh;
@@ -147,8 +151,7 @@ button {
   gap: 24px;
 }
 
-.lesson-screen__header,
-.dictionary-screen__header {
+.lesson-screen__header {
   display: grid;
   gap: 10px;
   padding: 8px 0 22px;
@@ -198,6 +201,160 @@ button {
   letter-spacing: 0;
 }
 
+.text-link {
+  color: #2f6f73;
+  font-weight: 720;
+  text-underline-offset: 3px;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 720;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.primary-button {
+  border: 1px solid #2f6f73;
+  color: #ffffff;
+  background: #2f6f73;
+}
+
+.secondary-button {
+  border: 1px solid #c9d3dc;
+  color: #172026;
+  background: #ffffff;
+}
+
+.primary-button:hover {
+  border-color: #255b5f;
+  background: #255b5f;
+}
+
+.secondary-button:hover {
+  border-color: #8fa0b2;
+  background: #edf1f5;
+}
+
+.primary-button:active,
+.secondary-button:active {
+  transform: translateY(1px);
+}
+
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.trainer-answer__input:focus-visible {
+  outline: 3px solid #8bd3dd;
+  outline-offset: 2px;
+}
+
+.trainer-card {
+  display: grid;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid #d8e0e7;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgb(23 32 38 / 8%);
+}
+
+.trainer-card--empty {
+  align-content: start;
+}
+
+.trainer-card__header,
+.trainer-task,
+.trainer-answer {
+  display: grid;
+  gap: 12px;
+}
+
+.trainer-task {
+  padding: 16px;
+  border: 1px solid #d8e0e7;
+  border-radius: 8px;
+  background: #f8fafb;
+}
+
+.trainer-task__prompt {
+  margin: 0;
+  color: #172026;
+  font-size: 1.15rem;
+  font-weight: 720;
+  line-height: 1.45;
+}
+
+.trainer-task__meta {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.trainer-task__meta div {
+  display: grid;
+  gap: 4px;
+}
+
+.trainer-task__meta dt {
+  color: #6a7680;
+  font-size: 0.75rem;
+  font-weight: 760;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.trainer-task__meta dd {
+  margin: 0;
+  color: #384753;
+  font-weight: 650;
+}
+
+.trainer-answer__label {
+  color: #384753;
+  font-size: 0.9rem;
+  font-weight: 720;
+}
+
+.trainer-answer__input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid #c9d3dc;
+  border-radius: 8px;
+  color: #172026;
+  background: #ffffff;
+}
+
+.trainer-answer__actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.trainer-feedback {
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.trainer-feedback--correct {
+  color: #255b5f;
+  background: #e1f1ef;
+}
+
+.trainer-feedback--incorrect {
+  color: #7b3d2f;
+  background: #f8e7df;
+}
+
 @media (min-width: 720px) {
   .app-main {
     padding: 28px 24px 48px;
@@ -205,6 +362,10 @@ button {
 
   .screen-title {
     font-size: 3rem;
+  }
+
+  .trainer-answer__actions {
+    grid-template-columns: minmax(140px, max-content) minmax(140px, max-content);
   }
 }
 

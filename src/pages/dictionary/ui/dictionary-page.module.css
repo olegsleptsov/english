@@ -1,0 +1,199 @@
+.stats {
+  position: sticky;
+  top: 126px;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid #cfd9e2;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 10px 28px rgb(23 32 38 / 8%);
+  backdrop-filter: blur(14px);
+}
+
+.statsItem {
+  display: grid;
+  min-width: 0;
+  min-height: 34px;
+  align-content: center;
+  justify-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #51606d;
+  background: #f6f8f9;
+  font-size: 0.68rem;
+  font-weight: 730;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.statsItem strong {
+  color: #172026;
+  font-size: 0.92rem;
+  line-height: 1;
+}
+
+.verbList {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.verbCard {
+  display: grid;
+  width: 100%;
+  min-height: 112px;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px 12px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid #d8e0e7;
+  border-radius: 8px;
+  color: #172026;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.verbCard:hover {
+  border-color: #95a7b7;
+}
+
+.verbCard:active {
+  transform: translateY(1px);
+}
+
+.verbCard:focus-visible {
+  outline: 3px solid #8bd3dd;
+  outline-offset: 2px;
+}
+
+.verbCardLearned {
+  border-color: #19a463;
+  color: #103c2b;
+  background: #e9fff4;
+  box-shadow: 0 10px 24px rgb(25 164 99 / 16%);
+}
+
+.verbCardLearned:hover {
+  border-color: #0f8e53;
+  background: #ddffed;
+}
+
+.verbRank {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: #51606d;
+  background: #edf1f5;
+  font-size: 0.8rem;
+  font-weight: 760;
+}
+
+.verbCardLearned .verbRank {
+  color: #0f6840;
+  background: #c7f5dc;
+}
+
+.verbMain {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.verbBase {
+  font-size: 1.25rem;
+  font-weight: 780;
+  line-height: 1.15;
+}
+
+.verbTranslation {
+  color: #51606d;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.verbCardLearned .verbTranslation {
+  color: #23664a;
+}
+
+.verbForms,
+.verbBadges {
+  grid-column: 1 / -1;
+}
+
+.verbForms {
+  color: #384753;
+  font-size: 0.95rem;
+  font-weight: 640;
+  line-height: 1.35;
+}
+
+.verbCardLearned .verbForms {
+  color: #184f39;
+}
+
+.verbBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.verbBadge,
+.verbStatus {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 760;
+}
+
+.verbBadge {
+  color: #7b3d2f;
+  background: #f8e7df;
+}
+
+.verbStatus {
+  color: #255b5f;
+  background: #e1f1ef;
+}
+
+.verbCardLearned .verbStatus {
+  color: #ffffff;
+  background: #19a463;
+}
+
+@media (min-width: 720px) {
+  .stats {
+    top: 126px;
+  }
+
+  .verbList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .stats {
+    top: 84px;
+  }
+
+  .verbList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
