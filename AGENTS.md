@@ -25,6 +25,8 @@ These notes are a working draft for future agent instructions. Treat them as pro
 
 - Mobile is the primary target. Start with small screens and add desktop refinements with media queries.
 - Use CSS Modules for component and slice styles. Keep global CSS only for reset, app shell, typography defaults, and truly shared primitives.
+- Use Gravity UI for reusable controls, but do not import `@gravity-ui/uikit` directly from features, widgets, or pages. Add or reuse wrappers in `shared/ui` first, then consume those wrappers from higher layers.
+- The app has both light and dark themes. When adding or changing UI, check both themes and prefer shared CSS variables over hardcoded colors.
 - Keep navigation reachable and readable on narrow screens.
 - Do not let text overflow controls, tabs, cards, or lesson layouts.
 - Desktop layouts should enhance the mobile structure instead of becoming a separate experience.

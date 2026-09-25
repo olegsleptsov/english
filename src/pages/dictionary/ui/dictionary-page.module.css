@@ -6,10 +6,10 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
   padding: 5px;
-  border: 1px solid #cfd9e2;
+  border: 1px solid var(--color-border-control);
   border-radius: 8px;
-  background: rgb(255 255 255 / 94%);
-  box-shadow: 0 10px 28px rgb(23 32 38 / 8%);
+  background: var(--color-surface-glass-subtle);
+  box-shadow: 0 10px 28px var(--shadow-subtle);
   backdrop-filter: blur(14px);
 }
 
@@ -22,8 +22,8 @@
   gap: 2px;
   padding: 4px 6px;
   border-radius: 6px;
-  color: #51606d;
-  background: #f6f8f9;
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
   font-size: 0.68rem;
   font-weight: 730;
   line-height: 1.05;
@@ -31,7 +31,7 @@
 }
 
 .statsItem strong {
-  color: #172026;
+  color: var(--color-text-primary);
   font-size: 0.92rem;
   line-height: 1;
 }
@@ -45,49 +45,75 @@
 }
 
 .verbCard {
+  --g-button-background-color: transparent;
+  --g-button-background-color-hover: transparent;
+  --g-button-focus-outline-color: var(--color-focus);
+  --g-button-height: auto;
+  --g-button-padding: 0;
+  --g-button-text-color: inherit;
+  --g-button-text-color-hover: inherit;
+
   display: grid;
   width: 100%;
+  height: auto;
   min-height: 112px;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 8px 12px;
   align-items: start;
-  padding: 14px;
-  border: 1px solid #d8e0e7;
+  justify-content: stretch;
+  padding: 0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  color: #172026;
-  background: #ffffff;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
   cursor: pointer;
+  line-height: normal;
   text-align: left;
+  white-space: normal;
   transition:
     background-color 160ms ease,
     border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease;
+    box-shadow 160ms ease;
+}
+
+.verbCard :global(.g-button__text) {
+  display: grid;
+  width: 100%;
+  justify-self: stretch;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px 12px;
+  align-items: start;
+  justify-items: start;
+  padding: 14px;
+  text-align: left;
+  white-space: normal;
+}
+
+.verbCard :global(.g-button__text) > * {
+  text-align: left;
 }
 
 .verbCard:hover {
-  border-color: #95a7b7;
+  border-color: var(--color-border-hover);
 }
 
 .verbCard:active {
-  transform: translateY(1px);
+  transform: none;
 }
 
 .verbCard:focus-visible {
-  outline: 3px solid #8bd3dd;
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
 .verbCardLearned {
-  border-color: #19a463;
-  color: #103c2b;
-  background: #e9fff4;
-  box-shadow: 0 10px 24px rgb(25 164 99 / 16%);
+  border-color: var(--color-success);
+  color: var(--color-success-text);
+  background: var(--color-success-bg);
+  box-shadow: 0 10px 24px var(--shadow-medium);
 }
 
 .verbCardLearned:hover {
-  border-color: #0f8e53;
-  background: #ddffed;
+  border-color: var(--color-success-strong);
+  background: var(--color-success-bg-hover);
 }
 
 .verbRank {
@@ -97,15 +123,15 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  color: #51606d;
-  background: #edf1f5;
+  color: var(--color-text-muted);
+  background: var(--color-rank-bg);
   font-size: 0.8rem;
   font-weight: 760;
 }
 
 .verbCardLearned .verbRank {
-  color: #0f6840;
-  background: #c7f5dc;
+  color: var(--color-success-muted-text);
+  background: var(--color-success-chip);
 }
 
 .verbMain {
@@ -121,13 +147,13 @@
 }
 
 .verbTranslation {
-  color: #51606d;
+  color: var(--color-text-muted);
   font-size: 0.95rem;
   line-height: 1.35;
 }
 
 .verbCardLearned .verbTranslation {
-  color: #23664a;
+  color: var(--color-success-muted-text);
 }
 
 .verbForms,
@@ -136,14 +162,14 @@
 }
 
 .verbForms {
-  color: #384753;
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
   font-weight: 640;
   line-height: 1.35;
 }
 
 .verbCardLearned .verbForms {
-  color: #184f39;
+  color: var(--color-success-text);
 }
 
 .verbBadges {
@@ -164,18 +190,18 @@
 }
 
 .verbBadge {
-  color: #7b3d2f;
-  background: #f8e7df;
+  color: var(--color-warning-text);
+  background: var(--color-warning-bg);
 }
 
 .verbStatus {
-  color: #255b5f;
-  background: #e1f1ef;
+  color: var(--color-status-text);
+  background: var(--color-accent-soft);
 }
 
 .verbCardLearned .verbStatus {
-  color: #ffffff;
-  background: #19a463;
+  color: var(--color-accent-contrast);
+  background: var(--color-success);
 }
 
 @media (min-width: 720px) {

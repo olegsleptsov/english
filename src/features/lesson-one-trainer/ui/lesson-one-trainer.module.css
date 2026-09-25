@@ -14,14 +14,14 @@
   align-content: start;
   min-height: auto;
   padding: 18px;
-  border: 1px solid #d8e0e7;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .submitButton:focus-visible,
 .input:focus-visible {
-  outline: 3px solid #8bd3dd;
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -33,7 +33,7 @@
 
 .prompt {
   margin: 0;
-  color: #172026;
+  color: var(--color-text-primary);
   font-size: 2.25rem;
   font-weight: 780;
   letter-spacing: 0;
@@ -42,30 +42,56 @@
 }
 
 .label {
-  color: #51606d;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   font-weight: 720;
 }
 
 .input {
+  --g-text-input-background-color: var(--color-surface);
+  --g-text-input-border-color: var(--color-border-control);
+  --g-text-input-border-color-hover: var(--color-border-hover);
+  --g-text-input-border-color-active: var(--color-accent);
+  --g-text-input-border-radius: 8px;
+  --g-text-input-focus-outline-color: var(--color-focus);
+  --g-text-input-placeholder-color: var(--color-text-muted);
+  --g-text-input-text-color: var(--color-text-primary);
+
   width: 100%;
+  color: var(--color-text-primary);
+  font-size: 1.05rem;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.input :global(.g-text-input__content) {
   min-height: 56px;
-  padding: 0 14px;
-  border: 1px solid #c9d3dc;
-  border-radius: 8px;
-  color: #172026;
-  background: #ffffff;
+}
+
+.input :global(.g-text-input__control) {
+  min-height: 54px;
   font-size: 1.05rem;
 }
 
 .submitButton {
-  min-height: 52px;
-  border: 1px solid #2f6f73;
-  border-radius: 8px;
-  color: #ffffff;
-  background: #2f6f73;
+  --g-button-background-color: var(--color-accent);
+  --g-button-background-color-hover: var(--color-accent-hover);
+  --g-button-border-radius: 8px;
+  --g-button-focus-outline-color: var(--color-focus);
+  --g-button-height: 52px;
+  --g-button-padding: 16px;
+  --g-button-text-color: var(--color-accent-contrast);
+  --g-button-text-color-hover: var(--color-accent-contrast);
+
   cursor: pointer;
   font-weight: 760;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    transform 160ms ease;
 }
 
 .submitButton:active {
@@ -118,17 +144,17 @@
 }
 
 .feedbackCorrect {
-  color: #255b5f;
-  background: #e1f1ef;
+  color: var(--color-status-text);
+  background: var(--color-accent-soft);
 }
 
 .feedbackIncorrect {
-  color: #7b3d2f;
-  background: #f8e7df;
+  color: var(--color-warning-text);
+  background: var(--color-warning-bg);
 }
 
 .textLink {
-  color: #2f6f73;
+  color: var(--color-accent);
   font-weight: 720;
   text-underline-offset: 3px;
 }

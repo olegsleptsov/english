@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Sheet } from '@gravity-ui/uikit';
 import { NavLink, Outlet, useMatch } from 'react-router-dom';
 
 import { getLessonDetailById, type LessonDetail } from '@/entities/lesson';
 import { routes } from '@/shared/config/routes';
+import { useAppTheme } from '@/shared/lib/theme';
+import { Button, Sheet } from '@/shared/ui';
 import { AppNavigation } from '@/widgets/app-navigation';
 
 import styles from './app-layout.module.css';
@@ -15,6 +16,7 @@ export function AppLayout() {
     ? getLessonDetailById(activeLessonId)
     : undefined;
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const { theme, toggleTheme } = useAppTheme();
 
   useEffect(() => {
     setIsInfoOpen(false);
@@ -24,27 +26,49 @@ export function AppLayout() {
     <div className="app-layout">
       <header className="app-header">
         {activeLessonDetail ? (
-          <button
+          <Button
             aria-label={`Открыть информацию об уроке ${activeLessonDetail.lessonId}`}
             className={styles.headerInfoButton}
+            size="l"
             type="button"
+            view="outlined"
             onClick={() => setIsInfoOpen(true)}
           >
             i
-          </button>
+          </Button>
         ) : (
           <span className={styles.headerSpacer} aria-hidden="true" />
         )}
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? 'app-header__action app-header__action--active'
-              : 'app-header__action'
-          }
-          to={routes.dictionary}
-        >
-          Dictionary
-        </NavLink>
+        <div className={styles.headerActions}>
+          <Button
+            aria-label={
+              theme === 'light'
+                ? 'Включить темную тему'
+                : 'Включить светлую тему'
+            }
+            className={styles.themeToggle}
+            data-theme={theme}
+            selected={theme === 'dark'}
+            size="l"
+            type="button"
+            view="flat"
+            onClick={toggleTheme}
+          >
+            <span className={styles.themeToggleTrack} aria-hidden="true">
+              <span className={styles.themeToggleThumb} />
+            </span>
+          </Button>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? 'app-header__action app-header__action--active'
+                : 'app-header__action'
+            }
+            to={routes.dictionary}
+          >
+            Dictionary
+          </NavLink>
+        </div>
       </header>
       <AppNavigation />
       <main className="app-main">

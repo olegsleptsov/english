@@ -1,3 +1,10 @@
+.headerActions {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
 .headerInfoButton,
 .headerSpacer {
   flex: 0 0 auto;
@@ -6,12 +13,15 @@
 }
 
 .headerInfoButton {
+  --g-button-border-radius: 999px;
+  --g-button-height: 40px;
+  --g-button-padding: 0;
+
   display: inline-grid;
+  width: 40px;
   place-items: center;
-  border: 1px solid #c9d3dc;
   border-radius: 999px;
-  color: #2f6f73;
-  background: #ffffff;
+  color: var(--color-accent);
   cursor: pointer;
   font-size: 1rem;
   font-weight: 800;
@@ -19,7 +29,7 @@
 }
 
 .headerInfoButton:focus-visible {
-  outline: 3px solid #8bd3dd;
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -27,23 +37,104 @@
   transform: translateY(1px);
 }
 
+.themeToggle {
+  --g-button-background-color: transparent;
+  --g-button-background-color-hover: transparent;
+  --g-button-border-radius: 999px;
+  --g-button-height: 40px;
+  --g-button-padding: 0;
+  --g-button-text-color: inherit;
+  --g-button-text-color-hover: inherit;
+
+  display: inline-grid;
+  width: 56px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.themeToggle :global(.g-button__text) {
+  display: inline-grid;
+  place-items: center;
+}
+
+.themeToggle:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.themeToggleTrack {
+  position: relative;
+  display: block;
+  width: 50px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 74% 28%, rgb(255 255 255 / 48%) 0 2px, transparent 3px),
+    linear-gradient(135deg, #cce8ed, #fff3bd);
+  box-shadow: inset 0 1px 4px rgb(23 32 38 / 12%);
+  transition:
+    background 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease;
+}
+
+.themeToggleThumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #ffd45a;
+  box-shadow:
+    0 0 0 3px rgb(255 212 90 / 24%),
+    0 2px 8px rgb(23 32 38 / 20%);
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.9, 0.25, 1.15),
+    background 240ms ease,
+    box-shadow 240ms ease;
+}
+
+.themeToggle[data-theme='dark'] .themeToggleTrack {
+  background:
+    radial-gradient(circle at 22% 28%, rgb(255 255 255 / 62%) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 70%, rgb(255 255 255 / 42%) 0 1px, transparent 2px),
+    linear-gradient(135deg, #15232b, #263d51);
+  box-shadow: inset 0 1px 6px rgb(0 0 0 / 30%);
+}
+
+.themeToggle[data-theme='dark'] .themeToggleThumb {
+  background: #d9eff5;
+  box-shadow:
+    inset -6px -3px 0 #8095a0,
+    0 2px 8px rgb(0 0 0 / 36%);
+  transform: translateX(22px) rotate(18deg);
+}
+
 .sheetRoot :global(.g-sheet__sheet-scroll-container) {
   border-radius: 18px 18px 0 0;
-  background: #ffffff;
-  box-shadow: 0 -24px 48px rgb(23 32 38 / 18%);
+  background: var(--color-surface);
+  box-shadow: 0 -24px 48px var(--shadow-strong);
 }
 
 .sheetContent {
   display: grid;
   gap: 14px;
   padding: 18px 18px 24px;
-  color: #51606d;
+  color: var(--color-text-muted);
   line-height: 1.55;
 }
 
 .sheetContent :global(.g-sheet__sheet-content-title) {
   padding: 0 0 4px;
-  color: #172026;
+  color: var(--color-text-primary);
   font-size: 1.25rem;
   font-weight: 760;
   letter-spacing: 0;
@@ -63,7 +154,7 @@
 
 .topicTitle {
   margin: 0;
-  color: #172026;
+  color: var(--color-text-primary);
   font-size: 0.78rem;
   font-weight: 780;
   letter-spacing: 0;
@@ -80,10 +171,10 @@
 
 .topicItem {
   padding: 12px;
-  border: 1px solid #d8e0e7;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  color: #384753;
-  background: #f8fafb;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-soft);
 }
 
 @media (min-width: 720px) {
@@ -94,5 +185,12 @@
 
   .sheetRoot :global(.g-sheet__sheet-scroll-container) {
     border-radius: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .themeToggleTrack,
+  .themeToggleThumb {
+    transition: none;
   }
 }

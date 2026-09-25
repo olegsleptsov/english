@@ -1,10 +1,15 @@
 import type { ReactNode } from 'react';
-import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { AppThemeProvider, GravityThemeProvider } from '@/shared/lib/theme';
 
 type AppProvidersProps = {
   children: ReactNode;
 };
 
 export function AppProviders({ children }: AppProvidersProps) {
-  return <ThemeProvider theme="light">{children}</ThemeProvider>;
+  return (
+    <AppThemeProvider>
+      <GravityThemeProvider>{children}</GravityThemeProvider>
+    </AppThemeProvider>
+  );
 }

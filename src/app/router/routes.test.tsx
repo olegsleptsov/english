@@ -59,4 +59,21 @@ describe('app routes', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('to, from, in', { exact: false })).toBeInTheDocument();
   });
+
+  it('toggles the app theme from the header', async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(appRoutes, {
+      initialEntries: ['/lessons/1'],
+    });
+
+    renderWithProviders(<RouterProvider router={router} />);
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Включить темную тему' }),
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Включить светлую тему' }),
+    ).toBeInTheDocument();
+  });
 });

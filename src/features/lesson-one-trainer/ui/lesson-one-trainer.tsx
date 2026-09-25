@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { verbsApi, type VerbWithLearningStatus } from '@/entities/verb';
 import { routes } from '@/shared/config/routes';
+import { Button, TextInput } from '@/shared/ui';
 
 import {
   createLessonOneTask,
@@ -99,21 +100,28 @@ export function LessonOneTrainer() {
         <label className={styles.label} htmlFor="lesson-one-answer">
           Перевод на английский
         </label>
-        <input
+        <TextInput
           autoComplete="off"
           className={styles.input}
           id="lesson-one-answer"
           placeholder="she loves"
+          size="xl"
           type="text"
           value={answer}
-          onChange={(event) => {
-            setAnswer(event.target.value);
+          onUpdate={(value) => {
+            setAnswer(value);
             setAnswerStatus('idle');
           }}
         />
-        <button className={styles.submitButton} type="submit">
+        <Button
+          className={styles.submitButton}
+          size="xl"
+          type="submit"
+          view="action"
+          width="max"
+        >
           {answerStatus === 'idle' ? 'Проверить' : 'Следующее'}
-        </button>
+        </Button>
       </form>
 
       <div className={styles.feedbackSlot} aria-live="polite">

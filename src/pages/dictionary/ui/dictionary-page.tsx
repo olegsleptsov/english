@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { verbsApi, type VerbWithLearningStatus } from '@/entities/verb';
+import { Button } from '@/shared/ui';
 
 import styles from './dictionary-page.module.css';
 
@@ -66,13 +67,16 @@ export function DictionaryPage() {
         <ul className={styles.verbList} aria-label="English verbs dictionary">
           {verbs.map((verb) => (
             <li key={verb.id}>
-              <button
+              <Button
                 className={
                   verb.isLearned
                     ? `${styles.verbCard} ${styles.verbCardLearned}`
                     : styles.verbCard
                 }
+                size="xl"
                 type="button"
+                view="flat"
+                width="max"
                 onClick={() => void handleToggleVerb(verb)}
               >
                 <span className={styles.verbRank}>#{verb.rank}</span>
@@ -93,7 +97,7 @@ export function DictionaryPage() {
                     {verb.isLearned ? 'Выучен' : 'В повторении'}
                   </span>
                 </span>
-              </button>
+              </Button>
             </li>
           ))}
         </ul>
