@@ -7,6 +7,8 @@ These notes are a working draft for future agent instructions. Treat them as pro
 - The app is frontend-only: React, TypeScript, Vite.
 - The architecture style is Feature-Sliced Design.
 - UI work is mobile first. Design, implement, and test the mobile layout before expanding to desktop.
+- Domain context for the course lives in `.agents/polyglot-16-lessons-context.md`; read it before changing lesson content, trainer logic, vocabulary, or exercise generation.
+- Russian lesson summaries live in `.agents/polyglot-16-lessons-ru.md`; use them for product copy and lesson-level explanations.
 - Avoid adding a backend, server runtime, database, or network API layer unless explicitly requested.
 - Use `localStorage` as a temporary persistence backend only through isolated adapters. Do not access it directly from UI components.
 - Design future data calls as async request-like contracts so replacing `localStorage` with a real backend later is straightforward.
