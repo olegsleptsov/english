@@ -114,16 +114,246 @@ function createVerb(
   isIrregular = false,
   lessonOneCompatible = true,
 ): Verb {
+  const russianPresentForms = createRussianPresentForms(
+    getRussianPresentThirdPerson(base, translation),
+  );
+
   return {
     id: base,
     rank,
     base,
+    russian: {
+      infinitive: translation,
+    },
     thirdPersonSingular,
     pastSimple,
     pastParticiple,
     presentParticiple,
     translation,
+    forms: {
+      ru: {
+        present: russianPresentForms,
+      },
+    },
     isIrregular,
     lessonOneCompatible,
   };
+}
+
+function createRussianPresentForms(thirdPerson: string) {
+  const irregularForms = getRussianPresentFormsOverride(thirdPerson);
+
+  if (irregularForms) {
+    return irregularForms;
+  }
+
+  return {
+    firstPersonSingular: getRussianFirstPersonSingular(thirdPerson),
+    secondPerson: getRussianSecondPerson(thirdPerson),
+    thirdPerson,
+    firstPersonPlural: getRussianFirstPersonPlural(thirdPerson),
+    thirdPersonPlural: getRussianThirdPersonPlural(thirdPerson),
+  };
+}
+
+function getRussianPresentFormsOverride(thirdPerson: string) {
+  const forms: Record<string, ReturnType<typeof createRegularRussianPresentForms>> = {
+    имеет: createRegularRussianPresentForms({
+      firstPersonSingular: 'имею',
+      secondPerson: 'имеешь',
+      thirdPerson: 'имеет',
+      firstPersonPlural: 'имеем',
+      thirdPersonPlural: 'имеют',
+    }),
+  };
+
+  return forms[thirdPerson];
+}
+
+function createRegularRussianPresentForms(forms: {
+  firstPersonSingular: string;
+  secondPerson: string;
+  thirdPerson: string;
+  firstPersonPlural: string;
+  thirdPersonPlural: string;
+}) {
+  return forms;
+}
+
+function getRussianPresentThirdPerson(base: string, fallback: string) {
+  const forms: Record<string, string> = {
+    have: 'имеет',
+    do: 'делает',
+    say: 'говорит',
+    go: 'идет',
+    get: 'получает',
+    make: 'создает',
+    know: 'знает',
+    think: 'думает',
+    take: 'берет',
+    see: 'видит',
+    come: 'приходит',
+    want: 'хочет',
+    use: 'использует',
+    find: 'находит',
+    give: 'дает',
+    tell: 'рассказывает',
+    work: 'работает',
+    call: 'звонит',
+    try: 'пытается',
+    ask: 'спрашивает',
+    need: 'нуждается',
+    feel: 'чувствует',
+    become: 'становится',
+    leave: 'уходит',
+    put: 'кладет',
+    mean: 'значит',
+    keep: 'держит',
+    let: 'позволяет',
+    begin: 'начинает',
+    seem: 'кажется',
+    help: 'помогает',
+    talk: 'разговаривает',
+    turn: 'поворачивает',
+    start: 'начинает',
+    show: 'показывает',
+    hear: 'слышит',
+    play: 'играет',
+    run: 'бежит',
+    move: 'двигается',
+    live: 'живет',
+    believe: 'верит',
+    bring: 'приносит',
+    write: 'пишет',
+    sit: 'сидит',
+    stand: 'стоит',
+    lose: 'теряет',
+    pay: 'платит',
+    meet: 'встречает',
+    include: 'включает',
+    continue: 'продолжает',
+    set: 'устанавливает',
+    learn: 'изучает',
+    change: 'меняет',
+    lead: 'ведет',
+    understand: 'понимает',
+    watch: 'смотрит',
+    follow: 'следует',
+    stop: 'останавливает',
+    create: 'создает',
+    speak: 'говорит',
+    read: 'читает',
+    allow: 'позволяет',
+    add: 'добавляет',
+    spend: 'тратит',
+    grow: 'растет',
+    open: 'открывает',
+    walk: 'ходит',
+    win: 'выигрывает',
+    offer: 'предлагает',
+    remember: 'помнит',
+    love: 'любит',
+    consider: 'считает',
+    appear: 'появляется',
+    buy: 'покупает',
+    wait: 'ждет',
+    serve: 'служит',
+    die: 'умирает',
+    send: 'отправляет',
+    expect: 'ожидает',
+    build: 'строит',
+    stay: 'остается',
+    fall: 'падает',
+    cut: 'режет',
+    reach: 'достигает',
+    kill: 'убивает',
+    remain: 'остается',
+    suggest: 'предлагает',
+    raise: 'поднимает',
+    pass: 'проходит',
+    sell: 'продает',
+    require: 'требует',
+    report: 'сообщает',
+    decide: 'решает',
+    pull: 'тянет',
+    return: 'возвращается',
+    explain: 'объясняет',
+    hope: 'надеется',
+    develop: 'развивает',
+    carry: 'несет',
+  };
+
+  return forms[base] ?? fallback;
+}
+
+function getRussianFirstPersonSingular(thirdPerson: string) {
+  if (thirdPerson.endsWith('ает')) {
+    return `${thirdPerson.slice(0, -3)}аю`;
+  }
+
+  if (thirdPerson.endsWith('яет')) {
+    return `${thirdPerson.slice(0, -3)}яю`;
+  }
+
+  if (thirdPerson.endsWith('ует')) {
+    return `${thirdPerson.slice(0, -3)}ую`;
+  }
+
+  if (thirdPerson.endsWith('ет')) {
+    return `${thirdPerson.slice(0, -2)}у`;
+  }
+
+  if (thirdPerson.endsWith('ит')) {
+    return `${thirdPerson.slice(0, -2)}ю`;
+  }
+
+  return thirdPerson;
+}
+
+function getRussianSecondPerson(thirdPerson: string) {
+  if (thirdPerson.endsWith('ет')) {
+    return `${thirdPerson.slice(0, -2)}ешь`;
+  }
+
+  if (thirdPerson.endsWith('ит')) {
+    return `${thirdPerson.slice(0, -2)}ишь`;
+  }
+
+  return thirdPerson;
+}
+
+function getRussianFirstPersonPlural(thirdPerson: string) {
+  if (thirdPerson.endsWith('ет')) {
+    return `${thirdPerson.slice(0, -2)}ем`;
+  }
+
+  if (thirdPerson.endsWith('ит')) {
+    return `${thirdPerson.slice(0, -2)}им`;
+  }
+
+  return thirdPerson;
+}
+
+function getRussianThirdPersonPlural(thirdPerson: string) {
+  if (thirdPerson.endsWith('ает')) {
+    return `${thirdPerson.slice(0, -3)}ают`;
+  }
+
+  if (thirdPerson.endsWith('яет')) {
+    return `${thirdPerson.slice(0, -3)}яют`;
+  }
+
+  if (thirdPerson.endsWith('ует')) {
+    return `${thirdPerson.slice(0, -3)}уют`;
+  }
+
+  if (thirdPerson.endsWith('ет')) {
+    return `${thirdPerson.slice(0, -2)}ют`;
+  }
+
+  if (thirdPerson.endsWith('ит')) {
+    return `${thirdPerson.slice(0, -2)}ят`;
+  }
+
+  return thirdPerson;
 }

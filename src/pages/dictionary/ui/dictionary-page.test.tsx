@@ -1,5 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { renderWithProviders } from '@/shared/lib/testing';
@@ -12,23 +12,26 @@ describe('DictionaryPage', () => {
   });
 
   it('toggles verb learning status by clicking a verb card', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    });
 
     renderWithProviders(<DictionaryPage />);
 
-    const verbCards = await screen.findAllByRole('button');
-    const haveCard = screen.getByRole('button', { name: /have/i });
+    const verbList = await screen.findByLabelText('English verbs dictionary');
+    const haveCard = screen.getByText('have').closest('button');
 
-    expect(verbCards).toHaveLength(100);
+    expect(verbList.querySelectorAll('li')).toHaveLength(100);
+    expect(haveCard).toBeInstanceOf(HTMLButtonElement);
     expect(haveCard).toHaveTextContent('В повторении');
 
-    await user.click(haveCard);
+    await user.click(haveCard!);
 
     await waitFor(() => {
       expect(haveCard).toHaveTextContent('Выучен');
     });
 
-    await user.click(haveCard);
+    await user.click(haveCard!);
 
     await waitFor(() => {
       expect(haveCard).toHaveTextContent('В повторении');

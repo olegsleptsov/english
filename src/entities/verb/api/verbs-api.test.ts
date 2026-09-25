@@ -15,6 +15,20 @@ describe('verbsApi', () => {
     expect(ids.size).toBe(100);
   });
 
+  it('keeps Russian infinitive and present third-person forms in verb data', () => {
+    expect(
+      COMMON_ENGLISH_VERBS.every(
+        (verb) =>
+          verb.russian.infinitive.length > 0 &&
+          verb.forms.ru.present.firstPersonSingular.length > 0 &&
+          verb.forms.ru.present.secondPerson.length > 0 &&
+          verb.forms.ru.present.firstPersonPlural.length > 0 &&
+          verb.forms.ru.present.thirdPersonPlural.length > 0 &&
+          verb.forms.ru.present.thirdPerson.length > 0,
+      ),
+    ).toBe(true);
+  });
+
   it('marks a verb as learned and excludes it from practice verbs', async () => {
     await verbsApi.setVerbLearningStatus({
       verbId: 'have',

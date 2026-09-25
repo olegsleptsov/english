@@ -17,10 +17,7 @@ describe('app routes', () => {
     renderWithProviders(<RouterProvider router={router} />);
 
     expect(
-      await screen.findByRole('heading', {
-        level: 1,
-        name: 'Базовая таблица глагола',
-      }),
+      await screen.findByRole('textbox', { name: 'Перевод на английский' }),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('link', { name: 'Dictionary' }));

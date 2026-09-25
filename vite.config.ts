@@ -16,6 +16,11 @@ export default defineConfig({
   test: {
     css: true,
     environment: 'jsdom',
+    server: {
+      deps: {
+        inline: ['@gravity-ui/uikit'],
+      },
+    },
     setupFiles: './tests/setup.ts',
   },
 });

@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { Sheet } from '@gravity-ui/uikit';
 import { Link } from 'react-router-dom';
 
 import { verbsApi, type VerbWithLearningStatus } from '@/entities/verb';
@@ -9,6 +10,8 @@ import {
   isLessonOneAnswerCorrect,
 } from '../model/lesson-one-exercise';
 
+import styles from './lesson-one-trainer.module.css';
+
 type AnswerStatus = 'idle' | 'correct' | 'incorrect';
 
 export function LessonOneTrainer() {
@@ -17,6 +20,7 @@ export function LessonOneTrainer() {
   const [taskIndex, setTaskIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [answerStatus, setAnswerStatus] = useState<AnswerStatus>('idle');
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -49,6 +53,11 @@ export function LessonOneTrainer() {
       return;
     }
 
+    if (answerStatus !== 'idle') {
+      handleNextTask();
+      return;
+    }
+
     setAnswerStatus(
       isLessonOneAnswerCorrect(answer, task.expectedAnswer)
         ? 'correct'
@@ -64,7 +73,7 @@ export function LessonOneTrainer() {
 
   if (isLoading) {
     return (
-      <section className="trainer-card" aria-live="polite">
+      <section className={styles.card} aria-live="polite">
         Загрузка тренажера...
       </section>
     );
@@ -72,13 +81,13 @@ export function LessonOneTrainer() {
 
   if (!task) {
     return (
-      <section className="trainer-card trainer-card--empty">
+      <section className={`${styles.card} ${styles.emptyCard}`}>
         <h2 className="section-title">Все доступные глаголы отмечены выученными</h2>
         <p className="section-copy">
           Верните нужные слова в повторение на странице словаря, и они снова
           появятся в заданиях.
         </p>
-        <Link className="text-link" to={routes.dictionary}>
+        <Link className={styles.textLink} to={routes.dictionary}>
           Открыть словарь
         </Link>
       </section>
@@ -86,44 +95,26 @@ export function LessonOneTrainer() {
   }
 
   return (
-    <section className="trainer-card" aria-labelledby="lesson-one-trainer-title">
-      <div className="trainer-card__header">
-        <p className="screen-kicker">Тренажер урока 1</p>
-        <h2 className="section-title" id="lesson-one-trainer-title">
-          Базовая таблица глагола
-        </h2>
-        <p className="section-copy">
-          В задания попадают только слова, которые не отмечены выученными в
-          словаре. Доступно для тренировки: {verbs.length}.
-        </p>
-      </div>
+    <section className={styles.card} aria-label="Тренажер урока 1">
+      <button
+        aria-label="Открыть информацию об уроке"
+        className={styles.infoButton}
+        type="button"
+        onClick={() => setIsInfoOpen(true)}
+      >
+        i
+      </button>
 
-      <div className="trainer-task">
-        <p className="trainer-task__prompt">{task.prompt}</p>
-        <dl className="trainer-task__meta">
-          <div>
-            <dt>Формула</dt>
-            <dd>{task.hint}</dd>
-          </div>
-          <div>
-            <dt>Формы</dt>
-            <dd>
-              {task.verb.base} · {task.verb.pastSimple} ·{' '}
-              {task.verb.pastParticiple}
-            </dd>
-          </div>
-        </dl>
-      </div>
-
-      <form className="trainer-answer" onSubmit={handleSubmit}>
-        <label className="trainer-answer__label" htmlFor="lesson-one-answer">
-          Ответ на английском
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <p className={styles.prompt}>{task.prompt}</p>
+        <label className={styles.label} htmlFor="lesson-one-answer">
+          Перевод на английский
         </label>
         <input
           autoComplete="off"
-          className="trainer-answer__input"
+          className={styles.input}
           id="lesson-one-answer"
-          placeholder="Например: he works"
+          placeholder="she loves"
           type="text"
           value={answer}
           onChange={(event) => {
@@ -131,30 +122,81 @@ export function LessonOneTrainer() {
             setAnswerStatus('idle');
           }}
         />
-        <div className="trainer-answer__actions">
-          <button className="primary-button" type="submit">
-            Проверить
-          </button>
-          <button className="secondary-button" type="button" onClick={handleNextTask}>
-            Следующее
-          </button>
-        </div>
+        <button className={styles.submitButton} type="submit">
+          {answerStatus === 'idle' ? 'Проверить' : 'Следующее'}
+        </button>
       </form>
 
       {answerStatus !== 'idle' ? (
         <div
           className={
             answerStatus === 'correct'
-              ? 'trainer-feedback trainer-feedback--correct'
-              : 'trainer-feedback trainer-feedback--incorrect'
+              ? `${styles.feedback} ${styles.feedbackCorrect}`
+              : `${styles.feedback} ${styles.feedbackIncorrect}`
           }
           role="status"
         >
-          {answerStatus === 'correct'
-            ? 'Верно.'
-            : `Пока нет. Правильный ответ: ${task.expectedAnswer}`}
+          <span>{answerStatus === 'correct' ? 'Верно' : 'Правильный ответ'}</span>
+          <strong>{task.expectedAnswer}</strong>
         </div>
       ) : null}
+
+      <LessonOneInfoSheet
+        isOpen={isInfoOpen}
+        practiceVerbCount={verbs.length}
+        onClose={() => setIsInfoOpen(false)}
+      />
     </section>
+  );
+}
+
+type LessonOneInfoSheetProps = {
+  isOpen: boolean;
+  practiceVerbCount: number;
+  onClose: () => void;
+};
+
+function LessonOneInfoSheet({
+  isOpen,
+  practiceVerbCount,
+  onClose,
+}: LessonOneInfoSheetProps) {
+  return (
+    <Sheet
+      className={styles.sheetRoot}
+      contentClassName={styles.sheetContent}
+      hideTopBar
+      title="Урок 1: базовая таблица глагола"
+      visible={isOpen}
+      onClose={onClose}
+    >
+      <p>
+        Главная цель первого урока — довести до автоматизма простую схему
+        английского предложения: кто делает действие и какой глагол нужно
+        поставить.
+      </p>
+      <p>
+        Сейчас тренажер показывает короткую русскую фразу в настоящем времени.
+        Введите английский перевод и отправьте форму. После этого появится
+        правильный ответ, а следующий Enter откроет новую фразу.
+      </p>
+      <dl className={styles.sheetList}>
+        <div>
+          <dt>Текущий режим</dt>
+          <dd>утверждения, вопросы и отрицания в Present Simple</dd>
+        </div>
+        <div>
+          <dt>Доступно глаголов</dt>
+          <dd>{practiceVerbCount}</dd>
+        </div>
+        <div>
+          <dt>Словарь</dt>
+          <dd>
+            Глаголы, отмеченные выученными, не попадают в задания. Вернуть слово
+            в тренировку можно повторным нажатием в словаре.
+          </dd>
+        </div>
+      </dl>
+    </Sheet>
   );
 }
