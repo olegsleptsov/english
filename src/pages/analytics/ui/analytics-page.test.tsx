@@ -7,12 +7,12 @@ import { renderWithProviders } from '@/shared/lib/testing';
 
 import { AnalyticsPage } from './analytics-page';
 
-describe('AnalyticsPage', () => {
+describe('страница аналитики', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('renders analytics from the storage api', async () => {
+  it('показывает аналитику из интерфейса хранилища', async () => {
     await lessonAnalyticsApi.recordLessonAnswer({
       lessonId: 1,
       taskId: 'have-I-present-statement',
@@ -43,7 +43,7 @@ describe('AnalyticsPage', () => {
     expect(screen.queryByText('demo data')).not.toBeInTheDocument();
   });
 
-  it('shows mock analytics while the real storage is empty', async () => {
+  it('показывает демо-аналитику, пока реальное хранилище пустое', async () => {
     renderWithProviders(
       <MemoryRouter>
         <AnalyticsPage />

@@ -27,6 +27,8 @@ The stored value is versioned and grouped by lesson:
 
 When adding lesson 2+ trainers, record answer submissions through the same API with the current `lessonId`, stable `taskId`, and optional `verbId` when the task is verb-based.
 
+Manual verb learning status and automatic mastery are separate concepts. Manual status is stored by the verb API. Automatic mastery is calculated from lesson analytics thresholds, including total correct answers, minimum attempts, minimum accuracy, and per-construction coverage. Do not delete or rewrite analytics when either status changes.
+
 The analytics page must read data through `lessonAnalyticsApi`. During draft development, empty analytics can be visualized with demo data controlled by `USE_MOCK_ANALYTICS_WHEN_EMPTY` in `src/pages/analytics/model/mock-analytics.ts`; keep this toggle easy to remove or disable.
 
 ## Future Migration

@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "npm run typecheck && vite build",
     "test": "vitest run",
+    "test:e2e": "vitest run $(find src -name '*.test.tsx')",
+    "test:unit": "vitest run $(find src -name '*.test.ts')",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json"
   },

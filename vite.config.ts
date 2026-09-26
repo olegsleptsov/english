@@ -16,6 +16,7 @@ export default defineConfig({
   test: {
     css: true,
     environment: 'jsdom',
+    fsModuleCache: true,
     server: {
       deps: {
         inline: ['@gravity-ui/uikit'],

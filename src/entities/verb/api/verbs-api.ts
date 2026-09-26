@@ -52,7 +52,9 @@ async function getVerbsWithLearningStatus() {
 
   return COMMON_ENGLISH_VERBS.map((verb) => ({
     ...verb,
+    isAutoLearned: false,
     isLearned: learnedVerbIds.has(verb.id),
+    isManuallyLearned: learnedVerbIds.has(verb.id),
   }));
 }
 

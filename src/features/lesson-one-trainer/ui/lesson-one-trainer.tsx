@@ -7,8 +7,11 @@ import { routes } from '@/shared/config/routes';
 import { Button, TextInput } from '@/shared/ui';
 
 import {
+  createLessonOneProgressFromAnalytics,
   createLessonOneTask,
   isLessonOneAnswerCorrect,
+  type LessonOneExerciseProgress,
+  type LessonOneTask,
 } from '../model/lesson-one-exercise';
 
 import styles from './lesson-one-trainer.module.css';
@@ -17,36 +20,53 @@ type AnswerStatus = 'idle' | 'correct' | 'incorrect';
 
 export function LessonOneTrainer() {
   const [verbs, setVerbs] = useState<VerbWithLearningStatus[]>([]);
+  const [lessonProgress, setLessonProgress] =
+    useState<LessonOneExerciseProgress>({});
+  const [task, setTask] = useState<LessonOneTask | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [taskIndex, setTaskIndex] = useState(0);
+  const [isSavingAnswer, setIsSavingAnswer] = useState(false);
   const [answer, setAnswer] = useState('');
   const [answerStatus, setAnswerStatus] = useState<AnswerStatus>('idle');
 
   useEffect(() => {
     let isActive = true;
 
-    async function loadVerbs() {
-      const practiceVerbs = await verbsApi.getPracticeVerbs();
+    async function loadInitialTask() {
+      const [loadedVerbs, loadedAnalytics] = await Promise.all([
+        verbsApi.getVerbs(),
+        lessonAnalyticsApi.getLessonAnalytics(1),
+      ]);
 
       if (isActive) {
-        setVerbs(practiceVerbs.filter((verb) => verb.lessonOneCompatible));
+        const loadedProgress = createLessonOneProgressFromAnalytics(
+          loadedAnalytics,
+        );
+
+        setVerbs(loadedVerbs);
+        setLessonProgress(loadedProgress);
+        setTask(
+          createLessonOneTask({
+            progress: loadedProgress,
+            verbs: loadedVerbs,
+          }),
+        );
         setIsLoading(false);
       }
     }
 
-    void loadVerbs();
+    void loadInitialTask();
 
     return () => {
       isActive = false;
     };
   }, []);
 
-  const task = useMemo(
-    () => createLessonOneTask(verbs, taskIndex),
-    [taskIndex, verbs],
+  const hasAvailableVerbs = useMemo(
+    () => verbs.some((verb) => verb.lessonOneCompatible),
+    [verbs],
   );
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!task) {
@@ -54,23 +74,41 @@ export function LessonOneTrainer() {
     }
 
     if (answerStatus !== 'idle') {
-      handleNextTask();
+      if (!isSavingAnswer) {
+        handleNextTask();
+      }
+
       return;
     }
 
     const isCorrect = isLessonOneAnswerCorrect(answer, task.expectedAnswer);
 
     setAnswerStatus(isCorrect ? 'correct' : 'incorrect');
-    void lessonAnalyticsApi.recordLessonAnswer({
+    setIsSavingAnswer(true);
+
+    const updatedAnalytics = await lessonAnalyticsApi.recordLessonAnswer({
       lessonId: 1,
       taskId: task.id,
       verbId: task.verb.id,
       result: isCorrect ? 'correct' : 'incorrect',
     });
+
+    const updatedProgress = createLessonOneProgressFromAnalytics(
+      updatedAnalytics,
+    );
+
+    setLessonProgress(updatedProgress);
+    setIsSavingAnswer(false);
   }
 
   function handleNextTask() {
-    setTaskIndex((currentTaskIndex) => currentTaskIndex + 1);
+    setTask(
+      createLessonOneTask({
+        previousTask: task,
+        progress: lessonProgress,
+        verbs,
+      }),
+    );
     setAnswer('');
     setAnswerStatus('idle');
   }
@@ -83,7 +121,7 @@ export function LessonOneTrainer() {
     );
   }
 
-  if (!task) {
+  if (!task || !hasAvailableVerbs) {
     return (
       <section className={`${styles.card} ${styles.emptyCard}`}>
         <h2 className="section-title">Все доступные глаголы отмечены выученными</h2>
@@ -119,13 +157,18 @@ export function LessonOneTrainer() {
           }}
         />
         <Button
+          disabled={isSavingAnswer}
           className={styles.submitButton}
           size="xl"
           type="submit"
           view="action"
           width="max"
         >
-          {answerStatus === 'idle' ? 'Проверить' : 'Следующее'}
+          {isSavingAnswer
+            ? 'Сохраняем...'
+            : answerStatus === 'idle'
+              ? 'Проверить'
+              : 'Следующее'}
         </Button>
       </form>
 

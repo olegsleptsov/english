@@ -3,19 +3,19 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { COMMON_ENGLISH_VERBS } from '../model/common-verbs';
 import { verbsApi } from './verbs-api';
 
-describe('verbsApi', () => {
+describe('интерфейс глаголов', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('returns 100 hardcoded common verbs with unique ids', () => {
+  it('возвращает 100 захардкоженных частотных глаголов с уникальными идентификаторами', () => {
     const ids = new Set(COMMON_ENGLISH_VERBS.map((verb) => verb.id));
 
     expect(COMMON_ENGLISH_VERBS).toHaveLength(100);
     expect(ids.size).toBe(100);
   });
 
-  it('keeps Russian infinitive and present third-person forms in verb data', () => {
+  it('хранит русский инфинитив и формы настоящего времени в данных глагола', () => {
     expect(
       COMMON_ENGLISH_VERBS.every(
         (verb) =>
@@ -29,7 +29,7 @@ describe('verbsApi', () => {
     ).toBe(true);
   });
 
-  it('marks a verb as learned and excludes it from practice verbs', async () => {
+  it('помечает глагол как выученный вручную и исключает его из тренировки', async () => {
     await verbsApi.setVerbLearningStatus({
       verbId: 'have',
       isLearned: true,
@@ -39,10 +39,14 @@ describe('verbsApi', () => {
     const practiceVerbs = await verbsApi.getPracticeVerbs();
 
     expect(verbs.find((verb) => verb.id === 'have')?.isLearned).toBe(true);
+    expect(verbs.find((verb) => verb.id === 'have')?.isManuallyLearned).toBe(
+      true,
+    );
+    expect(verbs.find((verb) => verb.id === 'have')?.isAutoLearned).toBe(false);
     expect(practiceVerbs.some((verb) => verb.id === 'have')).toBe(false);
   });
 
-  it('returns a learned verb to practice when status is removed', async () => {
+  it('возвращает вручную выученный глагол в тренировку после снятия отметки', async () => {
     await verbsApi.setVerbLearningStatus({
       verbId: 'have',
       isLearned: true,

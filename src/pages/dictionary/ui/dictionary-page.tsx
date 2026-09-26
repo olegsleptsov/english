@@ -1,22 +1,40 @@
 import { useEffect, useState } from 'react';
 
+import { lessonAnalyticsApi } from '@/entities/lesson-analytics';
 import { verbsApi, type VerbWithLearningStatus } from '@/entities/verb';
+import {
+  applyLessonOneAutoLearningStatus,
+  createLessonOneProgressFromAnalytics,
+  type LessonOneExerciseProgress,
+} from '@/features/lesson-one-trainer/model/lesson-one-exercise';
 import { Button } from '@/shared/ui';
 
 import styles from './dictionary-page.module.css';
 
 export function DictionaryPage() {
   const [verbs, setVerbs] = useState<VerbWithLearningStatus[]>([]);
+  const [lessonProgress, setLessonProgress] =
+    useState<LessonOneExerciseProgress>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isActive = true;
 
     async function loadVerbs() {
-      const loadedVerbs = await verbsApi.getVerbs();
+      const [loadedVerbs, loadedAnalytics] = await Promise.all([
+        verbsApi.getVerbs(),
+        lessonAnalyticsApi.getLessonAnalytics(1),
+      ]);
 
       if (isActive) {
-        setVerbs(loadedVerbs);
+        const loadedProgress = createLessonOneProgressFromAnalytics(
+          loadedAnalytics,
+        );
+
+        setLessonProgress(loadedProgress);
+        setVerbs(
+          applyLessonOneAutoLearningStatus(loadedVerbs, loadedProgress),
+        );
         setIsLoading(false);
       }
     }
@@ -34,12 +52,18 @@ export function DictionaryPage() {
   async function handleToggleVerb(verb: VerbWithLearningStatus) {
     const updatedVerb = await verbsApi.setVerbLearningStatus({
       verbId: verb.id,
-      isLearned: !verb.isLearned,
+      isLearned: !verb.isManuallyLearned,
     });
+    const [updatedVerbWithAutoStatus] = applyLessonOneAutoLearningStatus(
+      [updatedVerb],
+      lessonProgress,
+    );
 
     setVerbs((currentVerbs) =>
       currentVerbs.map((currentVerb) =>
-        currentVerb.id === updatedVerb.id ? updatedVerb : currentVerb,
+        currentVerb.id === updatedVerb.id
+          ? updatedVerbWithAutoStatus
+          : currentVerb,
       ),
     );
   }
@@ -94,7 +118,7 @@ export function DictionaryPage() {
                     <span className={styles.verbBadge}>irregular</span>
                   ) : null}
                   <span className={styles.verbStatus}>
-                    {verb.isLearned ? 'Выучен' : 'В повторении'}
+                    {getVerbStatusLabel(verb)}
                   </span>
                 </span>
               </Button>
@@ -104,4 +128,16 @@ export function DictionaryPage() {
       )}
     </section>
   );
+}
+
+function getVerbStatusLabel(verb: VerbWithLearningStatus) {
+  if (verb.isManuallyLearned) {
+    return 'Выучен вручную';
+  }
+
+  if (verb.isAutoLearned) {
+    return 'Освоен программой';
+  }
+
+  return 'В повторении';
 }

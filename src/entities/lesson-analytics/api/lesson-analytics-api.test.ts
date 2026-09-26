@@ -2,12 +2,12 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { lessonAnalyticsApi } from './lesson-analytics-api';
 
-describe('lessonAnalyticsApi', () => {
+describe('интерфейс аналитики уроков', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('records daily correct and incorrect answers for a lesson', async () => {
+  it('сохраняет дневные правильные и неправильные ответы по уроку', async () => {
     await lessonAnalyticsApi.recordLessonAnswer({
       lessonId: 1,
       taskId: 'have-I-present-statement',
@@ -35,7 +35,7 @@ describe('lessonAnalyticsApi', () => {
     });
   });
 
-  it('aggregates verb and task stats for future analytics screens', async () => {
+  it('агрегирует статистику по глаголам и заданиям для будущих экранов аналитики', async () => {
     await lessonAnalyticsApi.recordLessonAnswer({
       lessonId: 1,
       taskId: 'have-I-present-statement',

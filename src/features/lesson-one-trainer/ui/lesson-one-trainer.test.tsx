@@ -1,19 +1,24 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { lessonAnalyticsApi } from '@/entities/lesson-analytics';
 import { renderWithProviders } from '@/shared/lib/testing';
 
 import { LessonOneTrainer } from './lesson-one-trainer';
 
-describe('LessonOneTrainer', () => {
+describe('тренажер первого урока', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('shows the correct answer and then moves to the next phrase', async () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('показывает правильный ответ и затем генерирует следующую фразу', async () => {
     const user = userEvent.setup();
+    vi.spyOn(Math, 'random').mockReturnValue(0);
 
     renderWithProviders(<LessonOneTrainer />);
 
@@ -27,13 +32,17 @@ describe('LessonOneTrainer', () => {
 
     expect(screen.getByRole('status')).toHaveTextContent('I have');
 
-    await user.click(screen.getByRole('button', { name: 'Следующее' }));
+    await user.click(await screen.findByRole('button', { name: 'Следующее' }));
 
-    expect(await screen.findByText('Ты имеешь')).toBeInTheDocument();
+    expect(screen.queryByText('Я имею')).not.toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'Проверить' }),
+    ).toBeInTheDocument();
   });
 
-  it('records answer analytics on form submit', async () => {
+  it('сохраняет аналитику ответа при отправке формы', async () => {
     const user = userEvent.setup();
+    vi.spyOn(Math, 'random').mockReturnValue(0);
 
     renderWithProviders(<LessonOneTrainer />);
 

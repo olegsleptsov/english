@@ -26,5 +26,7 @@ export type Verb = {
 };
 
 export type VerbWithLearningStatus = Verb & {
+  isManuallyLearned: boolean;
+  isAutoLearned: boolean;
   isLearned: boolean;
 };

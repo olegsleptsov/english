@@ -7,12 +7,12 @@ import { renderWithProviders } from '@/shared/lib/testing';
 
 import { appRoutes } from './routes';
 
-describe('app routes', () => {
+describe('маршруты приложения', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('navigates between lesson and dictionary screens', async () => {
+  it('переходит между экраном урока, словарем и аналитикой', async () => {
     const user = userEvent.setup();
     const router = createMemoryRouter(appRoutes, {
       initialEntries: ['/lessons/1'],
@@ -43,7 +43,7 @@ describe('app routes', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Analytics' })).toBeInTheDocument();
   });
 
-  it('opens route-specific lesson details from the header', async () => {
+  it('открывает справку текущего урока из шапки', async () => {
     const user = userEvent.setup();
     const router = createMemoryRouter(appRoutes, {
       initialEntries: ['/lessons/2'],
@@ -65,7 +65,7 @@ describe('app routes', () => {
     expect(screen.getByText('to, from, in', { exact: false })).toBeInTheDocument();
   });
 
-  it('toggles the app theme from the header', async () => {
+  it('переключает тему приложения из шапки', async () => {
     const user = userEvent.setup();
     const router = createMemoryRouter(appRoutes, {
       initialEntries: ['/lessons/1'],
