@@ -1,9 +1,10 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { renderWithProviders } from '@/shared/lib/testing';
+import { routes } from '@/shared/config/routes';
 
 import { appRoutes } from './routes';
 
@@ -12,8 +13,7 @@ describe('маршруты приложения', () => {
     window.localStorage.clear();
   });
 
-  it('переходит между экраном урока, словарем и аналитикой', async () => {
-    const user = userEvent.setup();
+  it('открывает словарь из шапки', async () => {
     const router = createMemoryRouter(appRoutes, {
       initialEntries: ['/lessons/1'],
     });
@@ -25,22 +25,43 @@ describe('маршруты приложения', () => {
       await screen.findByRole('textbox', { name: 'Перевод на английский' }),
     ).toBeInTheDocument();
 
-    await user.click(screen.getByRole('link', { name: 'Dictionary' }));
+    fireEvent.click(screen.getByRole('link', { name: 'Dictionary' }));
 
     expect(
       await screen.findByRole('list', { name: 'English verbs dictionary' }),
     ).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe(routes.dictionary);
+  });
 
-    await user.click(screen.getByRole('link', { name: 'Lesson 16' }));
+  it('переходит к выбранному уроку из навигации', async () => {
+    const router = createMemoryRouter(appRoutes, {
+      initialEntries: ['/lessons/1'],
+    });
+
+    renderWithProviders(<RouterProvider router={router} />);
+
+    fireEvent.click(await screen.findByRole('link', { name: 'Lesson 16' }));
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Lesson 16' }),
     ).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe(routes.lesson(16));
+  });
 
-    await user.click(screen.getByRole('link', { name: 'Открыть аналитику' }));
+  it('открывает аналитику из шапки', async () => {
+    const router = createMemoryRouter(appRoutes, {
+      initialEntries: ['/lessons/1'],
+    });
+
+    renderWithProviders(<RouterProvider router={router} />);
+
+    fireEvent.click(
+      await screen.findByRole('link', { name: 'Открыть аналитику' }),
+    );
 
     expect(await screen.findByText('Всего ответов')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'Analytics' })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe(routes.analytics);
   });
 
   it('открывает справку текущего урока из шапки', async () => {
