@@ -65,6 +65,26 @@ describe('маршруты приложения', () => {
     expect(screen.getByText('to, from, in', { exact: false })).toBeInTheDocument();
   });
 
+  it('показывает формулу построения предложений в справке первого урока', async () => {
+    const user = userEvent.setup();
+    const router = createMemoryRouter(appRoutes, {
+      initialEntries: ['/lessons/1'],
+    });
+
+    renderWithProviders(<RouterProvider router={router} />);
+
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Открыть информацию об уроке 1',
+      }),
+    );
+
+    expect(screen.getByText('Формула предложений')).toBeInTheDocument();
+    expect(screen.getByText('Present Simple')).toBeInTheDocument();
+    expect(screen.getByText('кто + V / V-s / V-es')).toBeInTheDocument();
+    expect(screen.getByText('Где нужна неправильная форма')).toBeInTheDocument();
+  });
+
   it('переключает тему приложения из шапки', async () => {
     const user = userEvent.setup();
     const router = createMemoryRouter(appRoutes, {

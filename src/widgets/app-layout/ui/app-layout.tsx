@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useMatch } from 'react-router-dom';
 
-import { getLessonDetailById, type LessonDetail } from '@/entities/lesson';
+import {
+  getLessonDetailById,
+  type LessonDetail,
+  type LessonFormula,
+} from '@/entities/lesson';
 import { routes } from '@/shared/config/routes';
 import { useAppTheme } from '@/shared/lib/theme';
 import { AnalyticsIcon, Button, Sheet } from '@/shared/ui';
@@ -120,6 +124,7 @@ function LessonInfoSheet({
           {lessonDetail.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+          <LessonFormulaBlock formula={lessonDetail.formula} />
           <section
             className={styles.topicBlock}
             aria-labelledby={`lesson-${lessonDetail.lessonId}-topics`}
@@ -141,5 +146,65 @@ function LessonInfoSheet({
         </>
       ) : null}
     </Sheet>
+  );
+}
+
+function LessonFormulaBlock({ formula }: { formula: LessonFormula | undefined }) {
+  if (!formula) {
+    return null;
+  }
+
+  return (
+    <section className={styles.formulaBlock} aria-labelledby="lesson-formula-title">
+      <div className={styles.formulaHeader}>
+        <h3 className={styles.topicTitle} id="lesson-formula-title">
+          {formula.title}
+        </h3>
+        <p>{formula.lead}</p>
+      </div>
+      <div className={styles.formulaGrid}>
+        {formula.items.map((item) => (
+          <article className={styles.formulaCard} key={item.tense}>
+            <div className={styles.formulaCardHeader}>
+              <strong>{item.tense}</strong>
+              <span>{item.marker}</span>
+            </div>
+            <dl className={styles.formulaList}>
+              <div className={styles.formulaRow}>
+                <dt>Вопрос</dt>
+                <dd>
+                  <code>{item.question}</code>
+                </dd>
+              </div>
+              <div className={styles.formulaRow}>
+                <dt>Утверждение</dt>
+                <dd>
+                  <code>{item.statement}</code>
+                </dd>
+              </div>
+              <div className={styles.formulaRow}>
+                <dt>Отрицание</dt>
+                <dd>
+                  <code>{item.negative}</code>
+                </dd>
+              </div>
+            </dl>
+            <p className={styles.formulaNote}>{item.note}</p>
+          </article>
+        ))}
+      </div>
+      <div className={styles.ruleGrid}>
+        {formula.ruleBlocks.map((ruleBlock) => (
+          <article className={styles.ruleCard} key={ruleBlock.title}>
+            <h4>{ruleBlock.title}</h4>
+            <ul>
+              {ruleBlock.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }

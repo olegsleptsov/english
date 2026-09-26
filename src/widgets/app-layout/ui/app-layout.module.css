@@ -190,6 +190,119 @@
   gap: 10px;
 }
 
+.formulaBlock {
+  display: grid;
+  gap: 12px;
+}
+
+.formulaHeader {
+  display: grid;
+  gap: 8px;
+}
+
+.formulaHeader p {
+  color: var(--color-text-muted);
+}
+
+.formulaGrid,
+.ruleGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.formulaCard,
+.ruleCard {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-soft);
+}
+
+.formulaCardHeader {
+  display: grid;
+  gap: 4px;
+}
+
+.formulaCardHeader strong {
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 780;
+  line-height: 1.2;
+}
+
+.formulaCardHeader span {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.formulaList {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.formulaRow {
+  display: grid;
+  gap: 5px;
+}
+
+.formulaRow dt {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 760;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.formulaRow dd {
+  min-width: 0;
+  margin: 0;
+}
+
+.formulaRow code {
+  display: block;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 740;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+.formulaNote {
+  padding-inline-start: 10px;
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.ruleCard h4 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  font-weight: 780;
+  line-height: 1.25;
+}
+
+.ruleCard ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-inline-start: 18px;
+}
+
+.ruleCard li {
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+}
+
 .topicTitle {
   margin: 0;
   color: var(--color-text-primary);
@@ -223,6 +336,15 @@
 
   .sheetRoot :global(.g-sheet__sheet-scroll-container) {
     border-radius: 18px;
+  }
+
+  .formulaGrid,
+  .ruleGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .formulaGrid .formulaCard:first-child {
+    grid-column: 1 / -1;
   }
 }
 

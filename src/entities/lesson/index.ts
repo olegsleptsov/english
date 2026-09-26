@@ -6,4 +6,5 @@ export {
   lessons,
   type Lesson,
   type LessonDetail,
+  type LessonFormula,
 } from './model/lessons';

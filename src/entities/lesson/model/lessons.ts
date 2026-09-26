@@ -13,7 +13,29 @@ export type LessonDetail = {
   lessonId: number;
   title: string;
   paragraphs: string[];
+  formula?: LessonFormula;
   topics: string[];
+};
+
+export type LessonFormula = {
+  title: string;
+  lead: string;
+  items: LessonFormulaItem[];
+  ruleBlocks: LessonFormulaRuleBlock[];
+};
+
+export type LessonFormulaItem = {
+  tense: string;
+  marker: string;
+  question: string;
+  statement: string;
+  negative: string;
+  note: string;
+};
+
+export type LessonFormulaRuleBlock = {
+  title: string;
+  items: string[];
 };
 
 export const lessons: Lesson[] = Array.from({ length: LESSON_COUNT }, (_, index) => {
@@ -35,6 +57,54 @@ export const lessonDetails: LessonDetail[] = [
       'Главная цель первого урока — довести до автоматизма простую схему английского предложения: кто делает действие и какой глагол нужно поставить.',
       'Сейчас тренажер показывает короткую русскую фразу в настоящем времени. Введите английский перевод и отправьте форму. После этого появится правильный ответ, а следующий Enter откроет новую фразу.',
     ],
+    formula: {
+      title: 'Формула предложений',
+      lead: 'В этой таблице V означает базовую форму смыслового глагола: have, go, use, make.',
+      items: [
+        {
+          tense: 'Present Simple',
+          marker: 'обычно, регулярно, сейчас как факт',
+          question: 'Do / Does + кто + V?',
+          statement: 'кто + V / V-s / V-es',
+          negative: "кто + don't / doesn't + V",
+          note: 'В утверждении добавляй -s/-es только после he, she, it. В вопросе и отрицании после does/doesn’t глагол остается базовым.',
+        },
+        {
+          tense: 'Past Simple',
+          marker: 'вчера, раньше, уже случилось',
+          question: 'Did + кто + V?',
+          statement: 'кто + V-ed / V2',
+          negative: "кто + didn't + V",
+          note: 'Неправильная форма глагола нужна только в утверждении: went, had, made. После did/didn’t снова ставится базовая форма.',
+        },
+        {
+          tense: 'Future Simple',
+          marker: 'потом, завтра, в будущем',
+          question: 'Will + кто + V?',
+          statement: 'кто + will + V',
+          negative: 'кто + will not + V',
+          note: 'После will всегда используется базовая форма глагола: will go, will have, will use.',
+        },
+      ],
+      ruleBlocks: [
+        {
+          title: 'Когда добавлять -s или -es',
+          items: [
+            'Только в утвердительном Present Simple после he, she, it: he works, she uses.',
+            'Обычно добавляется -s: love → loves, make → makes.',
+            'После -s, -sh, -ch, -x, -o добавляется -es: watch → watches, go → goes.',
+            'Если глагол заканчивается на согласную + y, y меняется на -ies: try → tries.',
+          ],
+        },
+        {
+          title: 'Где нужна неправильная форма',
+          items: [
+            'Только в утвердительном Past Simple: I went, she had, they made.',
+            'В вопросах и отрицаниях Past Simple работает did/didn’t, поэтому смысловой глагол возвращается в базовую форму: Did she go? She didn’t go.',
+          ],
+        },
+      ],
+    },
     topics: [
       'утверждения, вопросы и отрицания в Present Simple',
       'do/does как вспомогательные элементы',
