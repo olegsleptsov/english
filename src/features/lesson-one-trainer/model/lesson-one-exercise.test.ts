@@ -11,6 +11,7 @@ import {
   isLessonOneAnswerCorrect,
   isLessonOneVerbAutoLearned,
   type LessonOneSentenceType,
+  type LessonOneTense,
 } from './lesson-one-exercise';
 import {
   AUTO_LEARNED_CORRECT_COUNT,
@@ -53,6 +54,56 @@ describe('модель заданий первого урока', () => {
     expect(task?.id).toBe('have-he-present-negative');
   });
 
+  it('создает конструкцию в будущем времени', () => {
+    const task = createLessonOneTask({
+      rng: createRngSequence([0, 0, 0, 0.4]),
+      verbs: getVerbsByIds(['have']),
+    });
+
+    expect(task?.tense).toBe('future');
+    expect(task?.prompt).toBe('Я буду иметь');
+    expect(task?.expectedAnswer).toBe('I will have');
+    expect(task?.id).toBe('have-I-future-statement');
+  });
+
+  it('создает отрицательную конструкцию в прошедшем времени', () => {
+    const task = createLessonOneTask({
+      rng: createRngSequence([0, 0.8, 0.6, 0.8]),
+      verbs: getVerbsByIds(['have']),
+    });
+
+    expect(task?.tense).toBe('past');
+    expect(task?.prompt).toBe('Она не имела');
+    expect(task?.expectedAnswer).toBe('she did not have');
+    expect(task?.id).toBe('have-she-past-negative');
+  });
+
+  it('создает вопросительную конструкцию в прошедшем времени', () => {
+    const task = createLessonOneTask({
+      rng: createRngSequence([0, 0.4, 0.9, 0.8]),
+      verbs: getVerbsByIds(['go']),
+    });
+
+    expect(task?.tense).toBe('past');
+    expect(task?.prompt).toBe('Они шли?');
+    expect(task?.expectedAnswer).toBe('Did they go?');
+    expect(task?.id).toBe('go-they-past-question');
+  });
+
+  it('создает корректные русские формы множественного числа для глаголов идти и брать', () => {
+    const goTask = createLessonOneTask({
+      rng: createRngSequence([0, 0, 0.9]),
+      verbs: getVerbsByIds(['go']),
+    });
+    const takeTask = createLessonOneTask({
+      rng: createRngSequence([0, 0, 0.9]),
+      verbs: getVerbsByIds(['take']),
+    });
+
+    expect(goTask?.prompt).toBe('Они идут');
+    expect(takeTask?.prompt).toBe('Они берут');
+  });
+
   it('принимает ответ без финальной пунктуации и с другим регистром', () => {
     expect(isLessonOneAnswerCorrect('  DO I HAVE? ', 'Do I have?')).toBe(true);
   });
@@ -78,6 +129,12 @@ describe('модель заданий первого урока', () => {
   it('принимает похожие отрицательные сокращения для будущих уроков', () => {
     expect(isLessonOneAnswerCorrect("I won't go", 'I will not go')).toBe(true);
     expect(isLessonOneAnswerCorrect("we can't wait", 'we cannot wait')).toBe(
+      true,
+    );
+  });
+
+  it("принимает willn't как вариант will not", () => {
+    expect(isLessonOneAnswerCorrect("we willn't do", 'we will not do')).toBe(
       true,
     );
   });
@@ -485,10 +542,12 @@ function createTask({
   correct,
   incorrect,
   sentenceType,
+  tense = 'present',
   verbId,
 }: {
   verbId: string;
   sentenceType: LessonOneSentenceType;
+  tense?: LessonOneTense;
   correct: number;
   incorrect: number;
 }) {
@@ -496,7 +555,7 @@ function createTask({
     correct,
     incorrect,
     shownCount: correct + incorrect,
-    taskId: `${verbId}-I-present-${sentenceType}`,
+    taskId: `${verbId}-I-${tense}-${sentenceType}`,
     verbId,
   };
 }

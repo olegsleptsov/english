@@ -1,48 +1,84 @@
-const NEGATIVE_CONTRACTION_REPLACEMENTS: Array<{
-  pattern: RegExp;
-  replacement: string;
-}> = [
-  { pattern: /\bdo\s+not\b/giu, replacement: "don't" },
-  { pattern: /\bdoes\s+not\b/giu, replacement: "doesn't" },
-  { pattern: /\bdid\s+not\b/giu, replacement: "didn't" },
-  { pattern: /\bis\s+not\b/giu, replacement: "isn't" },
-  { pattern: /\bare\s+not\b/giu, replacement: "aren't" },
-  { pattern: /\bwas\s+not\b/giu, replacement: "wasn't" },
-  { pattern: /\bwere\s+not\b/giu, replacement: "weren't" },
-  { pattern: /\bhave\s+not\b/giu, replacement: "haven't" },
-  { pattern: /\bhas\s+not\b/giu, replacement: "hasn't" },
-  { pattern: /\bhad\s+not\b/giu, replacement: "hadn't" },
-  { pattern: /\bwill\s+not\b/giu, replacement: "won't" },
-  { pattern: /\bwould\s+not\b/giu, replacement: "wouldn't" },
-  { pattern: /\bshould\s+not\b/giu, replacement: "shouldn't" },
-  { pattern: /\bcould\s+not\b/giu, replacement: "couldn't" },
-  { pattern: /\bcan\s+not\b/giu, replacement: "can't" },
-  { pattern: /\bcannot\b/giu, replacement: "can't" },
-  { pattern: /\bmust\s+not\b/giu, replacement: "mustn't" },
-  { pattern: /\bshall\s+not\b/giu, replacement: "shan't" },
-  { pattern: /\bdo\s+n['’]t\b/giu, replacement: "don't" },
-  { pattern: /\bdoes\s+n['’]t\b/giu, replacement: "doesn't" },
-  { pattern: /\bdid\s+n['’]t\b/giu, replacement: "didn't" },
-  { pattern: /\bis\s+n['’]t\b/giu, replacement: "isn't" },
-  { pattern: /\bare\s+n['’]t\b/giu, replacement: "aren't" },
-  { pattern: /\bwas\s+n['’]t\b/giu, replacement: "wasn't" },
-  { pattern: /\bwere\s+n['’]t\b/giu, replacement: "weren't" },
-  { pattern: /\bhave\s+n['’]t\b/giu, replacement: "haven't" },
-  { pattern: /\bhas\s+n['’]t\b/giu, replacement: "hasn't" },
-  { pattern: /\bhad\s+n['’]t\b/giu, replacement: "hadn't" },
-  { pattern: /\bwo\s+n['’]t\b/giu, replacement: "won't" },
-  { pattern: /\bwould\s+n['’]t\b/giu, replacement: "wouldn't" },
-  { pattern: /\bshould\s+n['’]t\b/giu, replacement: "shouldn't" },
-  { pattern: /\bcould\s+n['’]t\b/giu, replacement: "couldn't" },
-  { pattern: /\bca\s+n['’]t\b/giu, replacement: "can't" },
-  { pattern: /\bmust\s+n['’]t\b/giu, replacement: "mustn't" },
-  { pattern: /\bsha\s+n['’]t\b/giu, replacement: "shan't" },
+type NegativeAuxiliaryRule = {
+  auxiliary: string;
+  expansion: string;
+  contractions: string[];
+  extraFullForms?: string[];
+};
+
+const NEGATIVE_AUXILIARY_RULES: NegativeAuxiliaryRule[] = [
+  { auxiliary: 'do', expansion: 'do not', contractions: ["don't"] },
+  { auxiliary: 'does', expansion: 'does not', contractions: ["doesn't"] },
+  { auxiliary: 'did', expansion: 'did not', contractions: ["didn't"] },
+  { auxiliary: 'is', expansion: 'is not', contractions: ["isn't"] },
+  { auxiliary: 'are', expansion: 'are not', contractions: ["aren't"] },
+  { auxiliary: 'was', expansion: 'was not', contractions: ["wasn't"] },
+  { auxiliary: 'were', expansion: 'were not', contractions: ["weren't"] },
+  { auxiliary: 'have', expansion: 'have not', contractions: ["haven't"] },
+  { auxiliary: 'has', expansion: 'has not', contractions: ["hasn't"] },
+  { auxiliary: 'had', expansion: 'had not', contractions: ["hadn't"] },
+  { auxiliary: 'will', expansion: 'will not', contractions: ["won't"] },
+  { auxiliary: 'would', expansion: 'would not', contractions: ["wouldn't"] },
+  { auxiliary: 'should', expansion: 'should not', contractions: ["shouldn't"] },
+  { auxiliary: 'could', expansion: 'could not', contractions: ["couldn't"] },
+  {
+    auxiliary: 'can',
+    expansion: 'can not',
+    contractions: ["can't"],
+    extraFullForms: ['cannot'],
+  },
+  { auxiliary: 'must', expansion: 'must not', contractions: ["mustn't"] },
+  { auxiliary: 'shall', expansion: 'shall not', contractions: ["shan't"] },
+  { auxiliary: 'might', expansion: 'might not', contractions: ["mightn't"] },
+  { auxiliary: 'need', expansion: 'need not', contractions: ["needn't"] },
 ];
 
 export function normalizeEnglishNegativeContractions(value: string) {
-  return NEGATIVE_CONTRACTION_REPLACEMENTS.reduce(
-    (normalizedValue, { pattern, replacement }) =>
-      normalizedValue.replace(pattern, replacement),
+  return NEGATIVE_AUXILIARY_RULES.reduce(
+    (normalizedValue, rule) => normalizeNegativeAuxiliary(normalizedValue, rule),
     value.replace(/’/gu, "'"),
   );
+}
+
+function normalizeNegativeAuxiliary(
+  value: string,
+  {
+    auxiliary,
+    contractions,
+    expansion,
+    extraFullForms = [],
+  }: NegativeAuxiliaryRule,
+) {
+  const aliases = new Set([
+    `${auxiliary} not`,
+    `${auxiliary}n't`,
+    `${auxiliary}nt`,
+    `${auxiliary} n't`,
+    `${auxiliary} nt`,
+    ...extraFullForms,
+    ...contractions.flatMap((contraction) => [
+      contraction,
+      contraction.replace("'", ''),
+      contraction.replace("'", ' '),
+    ]),
+  ]);
+
+  return [...aliases].reduce(
+    (normalizedValue, alias) =>
+      normalizedValue.replace(createAliasRegexp(alias), expansion),
+    value,
+  );
+}
+
+function createAliasRegexp(alias: string) {
+  const escapedAlias = alias
+    .trim()
+    .split(/\s+/u)
+    .map(escapeRegExp)
+    .join('\\s+');
+
+  return new RegExp(`\\b${escapedAlias}\\b`, 'giu');
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 }

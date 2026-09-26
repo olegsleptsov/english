@@ -19,6 +19,12 @@ export type Verb = {
         firstPersonPlural: string;
         thirdPersonPlural: string;
       };
+      past: {
+        firstSecondPerson: string;
+        masculine: string;
+        feminine: string;
+        plural: string;
+      };
     };
   };
   isIrregular: boolean;

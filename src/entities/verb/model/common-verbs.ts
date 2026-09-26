@@ -114,9 +114,14 @@ function createVerb(
   isIrregular = false,
   lessonOneCompatible = true,
 ): Verb {
+  const primaryRussianInfinitive = getPrimaryRussianInfinitive(translation);
   const russianPresentForms = createRussianPresentForms(
     getRussianPresentThirdPerson(base, translation),
   );
+  const russianPastForms = createRussianPastForms({
+    base,
+    infinitive: primaryRussianInfinitive,
+  });
 
   return {
     id: base,
@@ -132,12 +137,17 @@ function createVerb(
     translation,
     forms: {
       ru: {
+        past: russianPastForms,
         present: russianPresentForms,
       },
     },
     isIrregular,
     lessonOneCompatible,
   };
+}
+
+function getPrimaryRussianInfinitive(translation: string) {
+  return translation.split('/')[0];
 }
 
 function createRussianPresentForms(thirdPerson: string) {
@@ -165,6 +175,265 @@ function getRussianPresentFormsOverride(thirdPerson: string) {
       firstPersonPlural: 'имеем',
       thirdPersonPlural: 'имеют',
     }),
+    идет: createRegularRussianPresentForms({
+      firstPersonSingular: 'иду',
+      secondPerson: 'идешь',
+      thirdPerson: 'идет',
+      firstPersonPlural: 'идем',
+      thirdPersonPlural: 'идут',
+    }),
+    берет: createRegularRussianPresentForms({
+      firstPersonSingular: 'беру',
+      secondPerson: 'берешь',
+      thirdPerson: 'берет',
+      firstPersonPlural: 'берем',
+      thirdPersonPlural: 'берут',
+    }),
+    видит: createRegularRussianPresentForms({
+      firstPersonSingular: 'вижу',
+      secondPerson: 'видишь',
+      thirdPerson: 'видит',
+      firstPersonPlural: 'видим',
+      thirdPersonPlural: 'видят',
+    }),
+    приходит: createRegularRussianPresentForms({
+      firstPersonSingular: 'прихожу',
+      secondPerson: 'приходишь',
+      thirdPerson: 'приходит',
+      firstPersonPlural: 'приходим',
+      thirdPersonPlural: 'приходят',
+    }),
+    хочет: createRegularRussianPresentForms({
+      firstPersonSingular: 'хочу',
+      secondPerson: 'хочешь',
+      thirdPerson: 'хочет',
+      firstPersonPlural: 'хотим',
+      thirdPersonPlural: 'хотят',
+    }),
+    находит: createRegularRussianPresentForms({
+      firstPersonSingular: 'нахожу',
+      secondPerson: 'находишь',
+      thirdPerson: 'находит',
+      firstPersonPlural: 'находим',
+      thirdPersonPlural: 'находят',
+    }),
+    пытается: createRegularRussianPresentForms({
+      firstPersonSingular: 'пытаюсь',
+      secondPerson: 'пытаешься',
+      thirdPerson: 'пытается',
+      firstPersonPlural: 'пытаемся',
+      thirdPersonPlural: 'пытаются',
+    }),
+    нуждается: createRegularRussianPresentForms({
+      firstPersonSingular: 'нуждаюсь',
+      secondPerson: 'нуждаешься',
+      thirdPerson: 'нуждается',
+      firstPersonPlural: 'нуждаемся',
+      thirdPersonPlural: 'нуждаются',
+    }),
+    становится: createRegularRussianPresentForms({
+      firstPersonSingular: 'становлюсь',
+      secondPerson: 'становишься',
+      thirdPerson: 'становится',
+      firstPersonPlural: 'становимся',
+      thirdPersonPlural: 'становятся',
+    }),
+    уходит: createRegularRussianPresentForms({
+      firstPersonSingular: 'ухожу',
+      secondPerson: 'уходишь',
+      thirdPerson: 'уходит',
+      firstPersonPlural: 'уходим',
+      thirdPersonPlural: 'уходят',
+    }),
+    кладет: createRegularRussianPresentForms({
+      firstPersonSingular: 'кладу',
+      secondPerson: 'кладешь',
+      thirdPerson: 'кладет',
+      firstPersonPlural: 'кладем',
+      thirdPersonPlural: 'кладут',
+    }),
+    значит: createRegularRussianPresentForms({
+      firstPersonSingular: 'значу',
+      secondPerson: 'значишь',
+      thirdPerson: 'значит',
+      firstPersonPlural: 'значим',
+      thirdPersonPlural: 'значат',
+    }),
+    держит: createRegularRussianPresentForms({
+      firstPersonSingular: 'держу',
+      secondPerson: 'держишь',
+      thirdPerson: 'держит',
+      firstPersonPlural: 'держим',
+      thirdPersonPlural: 'держат',
+    }),
+    кажется: createRegularRussianPresentForms({
+      firstPersonSingular: 'кажусь',
+      secondPerson: 'кажешься',
+      thirdPerson: 'кажется',
+      firstPersonPlural: 'кажемся',
+      thirdPersonPlural: 'кажутся',
+    }),
+    слышит: createRegularRussianPresentForms({
+      firstPersonSingular: 'слышу',
+      secondPerson: 'слышишь',
+      thirdPerson: 'слышит',
+      firstPersonPlural: 'слышим',
+      thirdPersonPlural: 'слышат',
+    }),
+    бежит: createRegularRussianPresentForms({
+      firstPersonSingular: 'бегу',
+      secondPerson: 'бежишь',
+      thirdPerson: 'бежит',
+      firstPersonPlural: 'бежим',
+      thirdPersonPlural: 'бегут',
+    }),
+    двигается: createRegularRussianPresentForms({
+      firstPersonSingular: 'двигаюсь',
+      secondPerson: 'двигаешься',
+      thirdPerson: 'двигается',
+      firstPersonPlural: 'двигаемся',
+      thirdPersonPlural: 'двигаются',
+    }),
+    живет: createRegularRussianPresentForms({
+      firstPersonSingular: 'живу',
+      secondPerson: 'живешь',
+      thirdPerson: 'живет',
+      firstPersonPlural: 'живем',
+      thirdPersonPlural: 'живут',
+    }),
+    приносит: createRegularRussianPresentForms({
+      firstPersonSingular: 'приношу',
+      secondPerson: 'приносишь',
+      thirdPerson: 'приносит',
+      firstPersonPlural: 'приносим',
+      thirdPersonPlural: 'приносят',
+    }),
+    пишет: createRegularRussianPresentForms({
+      firstPersonSingular: 'пишу',
+      secondPerson: 'пишешь',
+      thirdPerson: 'пишет',
+      firstPersonPlural: 'пишем',
+      thirdPersonPlural: 'пишут',
+    }),
+    сидит: createRegularRussianPresentForms({
+      firstPersonSingular: 'сижу',
+      secondPerson: 'сидишь',
+      thirdPerson: 'сидит',
+      firstPersonPlural: 'сидим',
+      thirdPersonPlural: 'сидят',
+    }),
+    платит: createRegularRussianPresentForms({
+      firstPersonSingular: 'плачу',
+      secondPerson: 'платишь',
+      thirdPerson: 'платит',
+      firstPersonPlural: 'платим',
+      thirdPersonPlural: 'платят',
+    }),
+    ведет: createRegularRussianPresentForms({
+      firstPersonSingular: 'веду',
+      secondPerson: 'ведешь',
+      thirdPerson: 'ведет',
+      firstPersonPlural: 'ведем',
+      thirdPersonPlural: 'ведут',
+    }),
+    тратит: createRegularRussianPresentForms({
+      firstPersonSingular: 'трачу',
+      secondPerson: 'тратишь',
+      thirdPerson: 'тратит',
+      firstPersonPlural: 'тратим',
+      thirdPersonPlural: 'тратят',
+    }),
+    растет: createRegularRussianPresentForms({
+      firstPersonSingular: 'расту',
+      secondPerson: 'растешь',
+      thirdPerson: 'растет',
+      firstPersonPlural: 'растем',
+      thirdPersonPlural: 'растут',
+    }),
+    ходит: createRegularRussianPresentForms({
+      firstPersonSingular: 'хожу',
+      secondPerson: 'ходишь',
+      thirdPerson: 'ходит',
+      firstPersonPlural: 'ходим',
+      thirdPersonPlural: 'ходят',
+    }),
+    любит: createRegularRussianPresentForms({
+      firstPersonSingular: 'люблю',
+      secondPerson: 'любишь',
+      thirdPerson: 'любит',
+      firstPersonPlural: 'любим',
+      thirdPersonPlural: 'любят',
+    }),
+    появляется: createRegularRussianPresentForms({
+      firstPersonSingular: 'появляюсь',
+      secondPerson: 'появляешься',
+      thirdPerson: 'появляется',
+      firstPersonPlural: 'появляемся',
+      thirdPersonPlural: 'появляются',
+    }),
+    ждет: createRegularRussianPresentForms({
+      firstPersonSingular: 'жду',
+      secondPerson: 'ждешь',
+      thirdPerson: 'ждет',
+      firstPersonPlural: 'ждем',
+      thirdPersonPlural: 'ждут',
+    }),
+    служит: createRegularRussianPresentForms({
+      firstPersonSingular: 'служу',
+      secondPerson: 'служишь',
+      thirdPerson: 'служит',
+      firstPersonPlural: 'служим',
+      thirdPersonPlural: 'служат',
+    }),
+    остается: createRegularRussianPresentForms({
+      firstPersonSingular: 'остаюсь',
+      secondPerson: 'остаешься',
+      thirdPerson: 'остается',
+      firstPersonPlural: 'остаемся',
+      thirdPersonPlural: 'остаются',
+    }),
+    режет: createRegularRussianPresentForms({
+      firstPersonSingular: 'режу',
+      secondPerson: 'режешь',
+      thirdPerson: 'режет',
+      firstPersonPlural: 'режем',
+      thirdPersonPlural: 'режут',
+    }),
+    проходит: createRegularRussianPresentForms({
+      firstPersonSingular: 'прохожу',
+      secondPerson: 'проходишь',
+      thirdPerson: 'проходит',
+      firstPersonPlural: 'проходим',
+      thirdPersonPlural: 'проходят',
+    }),
+    тянет: createRegularRussianPresentForms({
+      firstPersonSingular: 'тяну',
+      secondPerson: 'тянешь',
+      thirdPerson: 'тянет',
+      firstPersonPlural: 'тянем',
+      thirdPersonPlural: 'тянут',
+    }),
+    возвращается: createRegularRussianPresentForms({
+      firstPersonSingular: 'возвращаюсь',
+      secondPerson: 'возвращаешься',
+      thirdPerson: 'возвращается',
+      firstPersonPlural: 'возвращаемся',
+      thirdPersonPlural: 'возвращаются',
+    }),
+    надеется: createRegularRussianPresentForms({
+      firstPersonSingular: 'надеюсь',
+      secondPerson: 'надеешься',
+      thirdPerson: 'надеется',
+      firstPersonPlural: 'надеемся',
+      thirdPersonPlural: 'надеются',
+    }),
+    несет: createRegularRussianPresentForms({
+      firstPersonSingular: 'несу',
+      secondPerson: 'несешь',
+      thirdPerson: 'несет',
+      firstPersonPlural: 'несем',
+      thirdPersonPlural: 'несут',
+    }),
   };
 
   return forms[thirdPerson];
@@ -178,6 +447,95 @@ function createRegularRussianPresentForms(forms: {
   thirdPersonPlural: string;
 }) {
   return forms;
+}
+
+function createRussianPastForms({
+  base,
+  infinitive,
+}: {
+  base: string;
+  infinitive: string;
+}) {
+  const irregularForms = getRussianPastFormsOverride(base);
+
+  if (irregularForms) {
+    return irregularForms;
+  }
+
+  if (infinitive.endsWith('ться')) {
+    const stem = infinitive.slice(0, -4);
+
+    return createRegularRussianPastForms({
+      masculine: `${stem}лся`,
+      feminine: `${stem}лась`,
+      plural: `${stem}лись`,
+    });
+  }
+
+  if (infinitive.endsWith('ть')) {
+    const stem = infinitive.slice(0, -2);
+
+    return createRegularRussianPastForms({
+      masculine: `${stem}л`,
+      feminine: `${stem}ла`,
+      plural: `${stem}ли`,
+    });
+  }
+
+  return createRegularRussianPastForms({
+    masculine: infinitive,
+    feminine: infinitive,
+    plural: infinitive,
+  });
+}
+
+function getRussianPastFormsOverride(base: string) {
+  const forms: Record<string, ReturnType<typeof createRegularRussianPastForms>> = {
+    be: createRegularRussianPastForms({
+      masculine: 'был',
+      feminine: 'была',
+      plural: 'были',
+    }),
+    go: createRegularRussianPastForms({
+      masculine: 'шел',
+      feminine: 'шла',
+      plural: 'шли',
+    }),
+    grow: createRegularRussianPastForms({
+      masculine: 'рос',
+      feminine: 'росла',
+      plural: 'росли',
+    }),
+    lead: createRegularRussianPastForms({
+      masculine: 'вел',
+      feminine: 'вела',
+      plural: 'вели',
+    }),
+    carry: createRegularRussianPastForms({
+      masculine: 'нес',
+      feminine: 'несла',
+      plural: 'несли',
+    }),
+  };
+
+  return forms[base];
+}
+
+function createRegularRussianPastForms({
+  feminine,
+  masculine,
+  plural,
+}: {
+  masculine: string;
+  feminine: string;
+  plural: string;
+}) {
+  return {
+    firstSecondPerson: `${masculine}/${feminine}`,
+    masculine,
+    feminine,
+    plural,
+  };
 }
 
 function getRussianPresentThirdPerson(base: string, fallback: string) {

@@ -11,6 +11,7 @@ export type LessonOneSubject = {
 };
 
 export type LessonOneSentenceType = 'statement' | 'question' | 'negative';
+export type LessonOneTense = 'present' | 'future' | 'past';
 
 export type LessonOneTaskGenerationConfig = {
   windowSize: number;
@@ -80,6 +81,12 @@ export const LESSON_ONE_SENTENCE_TYPES: LessonOneSentenceType[] = [
   'statement',
   'question',
   'negative',
+];
+
+export const LESSON_ONE_TENSES: LessonOneTense[] = [
+  'present',
+  'future',
+  'past',
 ];
 
 export const DEFAULT_LESSON_ONE_TASK_GENERATION_CONFIG: LessonOneTaskGenerationConfig = {

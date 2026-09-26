@@ -33,6 +33,7 @@ export function LessonOneTrainer() {
   const [answer, setAnswer] = useState('');
   const [answerStatus, setAnswerStatus] = useState<AnswerStatus>('idle');
   const [answerError, setAnswerError] = useState<string | null>(null);
+  const [isAnswerInputFocused, setIsAnswerInputFocused] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -195,7 +196,7 @@ export function LessonOneTrainer() {
           autoComplete="off"
           className={styles.input}
           id="lesson-one-answer"
-          placeholder="she loves"
+          placeholder={isAnswerInputFocused ? '' : 'Your answer'}
           size="xl"
           type="text"
           value={answer}
@@ -205,6 +206,8 @@ export function LessonOneTrainer() {
               ? 'lesson-one-answer-error'
               : undefined,
           }}
+          onBlur={() => setIsAnswerInputFocused(false)}
+          onFocus={() => setIsAnswerInputFocused(true)}
           onUpdate={(value) => {
             setAnswer(value);
             setAnswerStatus('idle');
@@ -255,16 +258,6 @@ export function LessonOneTrainer() {
           </div>
         ) : null}
       </div>
-
-      <Button
-        className={styles.testNotifyButton}
-        size="m"
-        type="button"
-        view="outlined"
-        onClick={handleTestNotify}
-      >
-        Показать тестовую нотификацию
-      </Button>
     </section>
   );
 }

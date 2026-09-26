@@ -92,6 +92,26 @@ describe('тренажер первого урока', () => {
     expect(await lessonAnalyticsApi.getLessonAnalytics(1)).toBeUndefined();
   });
 
+  it('скрывает placeholder, когда поле ответа активно', async () => {
+    const user = userEvent.setup();
+
+    renderWithProviders(<LessonOneTrainer />);
+
+    const answerInput = await screen.findByRole('textbox', {
+      name: 'Перевод на английский',
+    });
+
+    expect(answerInput).toHaveAttribute('placeholder', 'Your answer');
+
+    await user.click(answerInput);
+
+    expect(answerInput).toHaveAttribute('placeholder', '');
+
+    await user.tab();
+
+    expect(answerInput).toHaveAttribute('placeholder', 'Your answer');
+  });
+
   it('показывает нотификацию, когда глагол становится выученным автоматически', async () => {
     const user = userEvent.setup();
     vi.spyOn(Math, 'random').mockReturnValue(0);
@@ -106,20 +126,6 @@ describe('тренажер первого урока', () => {
     await user.click(screen.getByRole('button', { name: 'Проверить' }));
 
     expect(await screen.findByText('have освоен')).toBeInTheDocument();
-  });
-
-  it('показывает тестовую нотификацию по ручной кнопке', async () => {
-    const user = userEvent.setup();
-
-    renderWithProviders(<LessonOneTrainer />);
-
-    await user.click(
-      await screen.findByRole('button', {
-        name: 'Показать тестовую нотификацию',
-      }),
-    );
-
-    expect(await screen.findByText('see освоен')).toBeInTheDocument();
   });
 });
 

@@ -6,18 +6,21 @@ import {
   DEFAULT_LESSON_ONE_TASK_GENERATION_CONFIG,
   LESSON_ONE_SENTENCE_TYPES,
   LESSON_ONE_SUBJECTS,
+  LESSON_ONE_TENSES,
   type LessonOneSentenceType,
   type LessonOneSubject,
   type LessonOneTaskGenerationConfig,
+  type LessonOneTense,
 } from './lesson-one-constants';
 
-export type { LessonOneSentenceType } from './lesson-one-constants';
+export type { LessonOneSentenceType, LessonOneTense } from './lesson-one-constants';
 
 export type LessonOneTask = {
   id: string;
   verb: Verb;
   subject: LessonOneSubject;
   sentenceType: LessonOneSentenceType;
+  tense: LessonOneTense;
   expectedAnswer: string;
   prompt: string;
 };
@@ -89,15 +92,27 @@ export function createLessonOneTask({
     items: LESSON_ONE_SUBJECTS,
     rng,
   });
-  const expectedAnswer = createExpectedAnswer({ sentenceType, subject, verb });
+  const tense = selectWeighted({
+    getWeight: (currentTense) =>
+      getTenseWeight({ previousTask, tense: currentTense }),
+    items: LESSON_ONE_TENSES,
+    rng,
+  });
+  const expectedAnswer = createExpectedAnswer({
+    sentenceType,
+    subject,
+    tense,
+    verb,
+  });
 
   return {
-    id: createLessonOneTaskId({ sentenceType, subject, verb }),
+    id: createLessonOneTaskId({ sentenceType, subject, tense, verb }),
     verb,
     subject,
     sentenceType,
+    tense,
     expectedAnswer,
-    prompt: createRussianPrompt({ sentenceType, subject, verb }),
+    prompt: createRussianPrompt({ sentenceType, subject, tense, verb }),
   };
 }
 
@@ -334,6 +349,20 @@ function getSubjectWeight({
   return 1;
 }
 
+function getTenseWeight({
+  previousTask,
+  tense,
+}: {
+  previousTask: LessonOneTask | null | undefined;
+  tense: LessonOneTense;
+}) {
+  if (previousTask?.tense === tense) {
+    return 0.25;
+  }
+
+  return 1;
+}
+
 function createEmptySentenceTypeProgress(): Record<
   LessonOneSentenceType,
   LessonOneSentenceTypeProgress
@@ -408,20 +437,22 @@ function selectWeighted<TItem>({
 function createRussianPrompt({
   sentenceType,
   subject,
+  tense,
   verb,
 }: {
   sentenceType: LessonOneSentenceType;
   subject: LessonOneSubject;
+  tense: LessonOneTense;
   verb: Verb;
 }) {
-  const phrase = `${capitalize(subject.ru)} ${getRussianPresentForm({ subject, verb })}`;
+  const phrase = createRussianPhrase({ subject, tense, verb });
 
   if (sentenceType === 'question') {
     return `${phrase}?`;
   }
 
   if (sentenceType === 'negative') {
-    return `${capitalize(subject.ru)} не ${getRussianPresentForm({ subject, verb })}`;
+    return createNegativeRussianPhrase({ subject, tense, verb });
   }
 
   return phrase;
@@ -430,12 +461,38 @@ function createRussianPrompt({
 function createExpectedAnswer({
   sentenceType,
   subject,
+  tense,
   verb,
 }: {
   sentenceType: LessonOneSentenceType;
   subject: LessonOneSubject;
+  tense: LessonOneTense;
   verb: Verb;
 }) {
+  if (tense === 'future') {
+    if (sentenceType === 'question') {
+      return `Will ${subject.value} ${verb.base}?`;
+    }
+
+    if (sentenceType === 'negative') {
+      return `${subject.value} will not ${verb.base}`;
+    }
+
+    return `${subject.value} will ${verb.base}`;
+  }
+
+  if (tense === 'past') {
+    if (sentenceType === 'question') {
+      return `Did ${subject.value} ${verb.base}?`;
+    }
+
+    if (sentenceType === 'negative') {
+      return `${subject.value} did not ${verb.base}`;
+    }
+
+    return `${subject.value} ${verb.pastSimple}`;
+  }
+
   if (sentenceType === 'question') {
     const auxiliary = subject.isThirdPersonSingular ? 'Does' : 'Do';
 
@@ -458,25 +515,33 @@ function createExpectedAnswer({
 function createLessonOneTaskId({
   sentenceType,
   subject,
+  tense,
   verb,
 }: {
   sentenceType: LessonOneSentenceType;
   subject: LessonOneSubject;
+  tense: LessonOneTense;
   verb: Verb;
 }) {
-  return `${verb.id}-${subject.value}-present-${sentenceType}`;
+  return `${verb.id}-${subject.value}-${tense}-${sentenceType}`;
 }
 
 function parseLessonOneTaskId(taskId: string) {
-  const [verbId, subjectValue, , rawSentenceType] = taskId.split('-');
+  const [verbId, subjectValue, rawTense, rawSentenceType] = taskId.split('-');
 
-  if (!isLessonOneSentenceType(rawSentenceType) || !verbId || !subjectValue) {
+  if (
+    !isLessonOneSentenceType(rawSentenceType) ||
+    !isLessonOneTense(rawTense) ||
+    !verbId ||
+    !subjectValue
+  ) {
     return null;
   }
 
   return {
     sentenceType: rawSentenceType,
     subjectValue,
+    tense: rawTense,
     verbId,
   };
 }
@@ -489,6 +554,10 @@ function isLessonOneSentenceType(
   );
 }
 
+function isLessonOneTense(value: string | undefined): value is LessonOneTense {
+  return value === 'present' || value === 'future' || value === 'past';
+}
+
 function getRussianPresentForm({
   subject,
   verb,
@@ -497,6 +566,92 @@ function getRussianPresentForm({
   verb: Verb;
 }) {
   return verb.forms.ru.present[subject.ruKey];
+}
+
+function createRussianPhrase({
+  subject,
+  tense,
+  verb,
+}: {
+  subject: LessonOneSubject;
+  tense: LessonOneTense;
+  verb: Verb;
+}) {
+  if (tense === 'future') {
+    return `${capitalize(subject.ru)} ${getRussianFutureAuxiliary(subject)} ${getPrimaryRussianInfinitive(verb)}`;
+  }
+
+  if (tense === 'past') {
+    return `${capitalize(subject.ru)} ${getRussianPastForm({ subject, verb })}`;
+  }
+
+  return `${capitalize(subject.ru)} ${getRussianPresentForm({ subject, verb })}`;
+}
+
+function createNegativeRussianPhrase({
+  subject,
+  tense,
+  verb,
+}: {
+  subject: LessonOneSubject;
+  tense: LessonOneTense;
+  verb: Verb;
+}) {
+  if (tense === 'future') {
+    return `${capitalize(subject.ru)} не ${getRussianFutureAuxiliary(subject)} ${getPrimaryRussianInfinitive(verb)}`;
+  }
+
+  if (tense === 'past') {
+    return `${capitalize(subject.ru)} не ${getRussianPastForm({ subject, verb })}`;
+  }
+
+  return `${capitalize(subject.ru)} не ${getRussianPresentForm({ subject, verb })}`;
+}
+
+function getRussianFutureAuxiliary(subject: LessonOneSubject) {
+  if (subject.value === 'I') {
+    return 'буду';
+  }
+
+  if (subject.value === 'you') {
+    return 'будешь';
+  }
+
+  if (subject.value === 'we') {
+    return 'будем';
+  }
+
+  if (subject.value === 'they') {
+    return 'будут';
+  }
+
+  return 'будет';
+}
+
+function getRussianPastForm({
+  subject,
+  verb,
+}: {
+  subject: LessonOneSubject;
+  verb: Verb;
+}) {
+  if (subject.value === 'she') {
+    return verb.forms.ru.past.feminine;
+  }
+
+  if (subject.value === 'we' || subject.value === 'they') {
+    return verb.forms.ru.past.plural;
+  }
+
+  if (subject.value === 'I' || subject.value === 'you') {
+    return verb.forms.ru.past.firstSecondPerson;
+  }
+
+  return verb.forms.ru.past.masculine;
+}
+
+function getPrimaryRussianInfinitive(verb: Verb) {
+  return verb.russian.infinitive.split('/')[0];
 }
 
 function getIsManuallyLearned(verb: Verb) {
