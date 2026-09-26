@@ -57,6 +57,31 @@ describe('модель заданий первого урока', () => {
     expect(isLessonOneAnswerCorrect('  DO I HAVE? ', 'Do I have?')).toBe(true);
   });
 
+  it("принимает don't, если правильный ответ записан как do not", () => {
+    expect(isLessonOneAnswerCorrect("you don't say", 'you do not say')).toBe(
+      true,
+    );
+  });
+
+  it("принимает do not, если правильный ответ записан как don't", () => {
+    expect(isLessonOneAnswerCorrect('you do not say', "you don't say")).toBe(
+      true,
+    );
+  });
+
+  it("принимает doesn't вместо does not в ответе первого урока", () => {
+    expect(
+      isLessonOneAnswerCorrect("he doesn't have", 'he does not have'),
+    ).toBe(true);
+  });
+
+  it('принимает похожие отрицательные сокращения для будущих уроков', () => {
+    expect(isLessonOneAnswerCorrect("I won't go", 'I will not go')).toBe(true);
+    expect(isLessonOneAnswerCorrect("we can't wait", 'we cannot wait')).toBe(
+      true,
+    );
+  });
+
   it('не создает задания для глаголов, несовместимых с первым уроком', () => {
     const task = createLessonOneTask({
       rng: createRngSequence([0, 0, 0]),

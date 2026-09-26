@@ -1,5 +1,6 @@
 import type { LessonAnalytics } from '@/entities/lesson-analytics';
 import type { Verb, VerbWithLearningStatus } from '@/entities/verb';
+import { normalizeEnglishNegativeContractions } from '@/shared/lib/english';
 
 import {
   DEFAULT_LESSON_ONE_TASK_GENERATION_CONFIG,
@@ -206,11 +207,13 @@ export function createLessonOneProgressFromAnalytics(
 }
 
 export function normalizeLessonOneAnswer(answer: string) {
-  return answer
+  const normalizedAnswer = answer
     .trim()
     .replace(/[?.!]+$/u, '')
     .replace(/\s+/gu, ' ')
     .toLowerCase();
+
+  return normalizeEnglishNegativeContractions(normalizedAnswer);
 }
 
 export function isLessonOneAnswerCorrect(answer: string, expectedAnswer: string) {

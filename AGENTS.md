@@ -35,6 +35,7 @@ These notes are a working draft for future agent instructions. Treat them as pro
 
 - Tests are part of the definition of done.
 - Write test case descriptions in Russian.
+- For any bug fix, first add or update a test that reproduces the bug and fails, then fix the bug and verify that the test turns green.
 - Add unit tests for pure functions and business rules.
 - Add RTL user-flow tests for the main positive scenarios. In this frontend-only app, these tests act as our e2e-like checks.
 - Avoid testing implementation details when user-visible behavior can be asserted instead.

@@ -19,6 +19,72 @@
   background: var(--color-surface);
 }
 
+.loadingCard {
+  min-height: calc(100dvh - 188px);
+  align-content: center;
+  justify-items: center;
+  padding: 32px 0;
+}
+
+.loader {
+  position: relative;
+  display: grid;
+  width: 76px;
+  aspect-ratio: 1;
+  place-items: center;
+}
+
+.loader::before,
+.loader::after {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  content: '';
+}
+
+.loader::before {
+  background:
+    conic-gradient(from 90deg, transparent 0 18%, var(--color-accent) 18% 48%, transparent 48% 100%),
+    radial-gradient(circle at center, transparent 0 56%, var(--color-border-control) 57% 59%, transparent 60%);
+  animation: loaderSpin 1.05s linear infinite;
+}
+
+.loader::after {
+  inset: 15px;
+  border: 1px solid var(--color-border-control-strong);
+  background:
+    radial-gradient(circle at 50% 18%, var(--color-kicker) 0 4px, transparent 5px),
+    var(--color-surface-glass);
+  box-shadow: 0 14px 34px var(--shadow-soft);
+  animation: loaderPulse 1.4s ease-in-out infinite;
+}
+
+.loader span {
+  position: absolute;
+  width: 9px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--color-success);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-success) 18%, transparent);
+  animation: loaderDot 1.4s ease-in-out infinite;
+}
+
+.loader span:nth-child(1) {
+  transform: translate(-30px, 2px);
+}
+
+.loader span:nth-child(2) {
+  background: var(--color-accent);
+  animation-delay: 160ms;
+  transform: translate(0, 32px);
+}
+
+.loader span:nth-child(3) {
+  background: var(--color-kicker);
+  animation-delay: 320ms;
+  transform: translate(30px, 2px);
+}
+
 .submitButton:focus-visible,
 .input:focus-visible {
   outline: 3px solid var(--color-focus);
@@ -73,6 +139,21 @@
 .input :global(.g-text-input__control) {
   min-height: 54px;
   font-size: 1.05rem;
+}
+
+.validationSlot {
+  display: grid;
+  min-height: 22px;
+  align-items: start;
+}
+
+.validationError {
+  margin: 0;
+  color: var(--color-warning-text);
+  font-size: 0.84rem;
+  font-weight: 680;
+  line-height: 1.35;
+  animation: validationReveal 220ms ease-out both;
 }
 
 .submitButton {
@@ -159,10 +240,21 @@
   text-underline-offset: 3px;
 }
 
+.testNotifyButton {
+  --g-button-border-radius: 8px;
+  --g-button-focus-outline-color: var(--color-focus);
+
+  justify-self: center;
+}
+
 @media (min-width: 720px) {
   .card {
     min-height: calc(100dvh - 220px);
     padding-top: 28px;
+  }
+
+  .loadingCard {
+    min-height: calc(100dvh - 220px);
   }
 
   .prompt {
@@ -172,8 +264,54 @@
 
 @media (prefers-reduced-motion: reduce) {
   .feedback,
-  .feedback::after {
+  .feedback::after,
+  .validationError,
+  .loader::before,
+  .loader::after,
+  .loader span {
     animation: none;
+  }
+}
+
+@keyframes loaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loaderPulse {
+  0%,
+  100% {
+    transform: scale(0.96);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes loaderDot {
+  0%,
+  100% {
+    opacity: 0.45;
+    scale: 0.82;
+  }
+
+  50% {
+    opacity: 1;
+    scale: 1.08;
+  }
+}
+
+@keyframes validationReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
