@@ -1,0 +1,314 @@
+.screen {
+  display: grid;
+  width: min(100%, 1040px);
+  margin: 0 auto;
+  gap: 16px;
+}
+
+.hero {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.titleBlock {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+}
+
+.kicker,
+.panelKicker {
+  margin: 0;
+  color: var(--color-kicker);
+  font-size: 0.72rem;
+  font-weight: 780;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 2.35rem;
+  font-weight: 780;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.lead {
+  max-width: 58ch;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.demoBadge {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-success-text);
+  background: var(--color-success-bg);
+  font-size: 0.72rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.kpiCard,
+.panel {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  box-shadow: 0 12px 30px var(--shadow-subtle);
+}
+
+.kpiCard {
+  display: grid;
+  min-height: 86px;
+  align-content: space-between;
+  gap: 10px;
+  padding: 14px;
+}
+
+.kpiLabel {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 720;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.kpiValue {
+  color: var(--color-text-primary);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+.panel {
+  display: grid;
+  min-width: 0;
+  gap: 16px;
+  padding: 16px;
+}
+
+.panelHeader {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.panelTitle {
+  margin: 4px 0 0;
+  color: var(--color-text-primary);
+  font-size: 1.1rem;
+  font-weight: 760;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.legend {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.legendCorrect,
+.legendIncorrect {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legendCorrect::before,
+.legendIncorrect::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  content: '';
+}
+
+.legendCorrect::before {
+  background: var(--color-success);
+}
+
+.legendIncorrect::before {
+  background: var(--color-kicker);
+}
+
+.dailyChart,
+.metricList,
+.compactList {
+  display: grid;
+  gap: 10px;
+}
+
+.dailyRow {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: 10px;
+}
+
+.dailyLabel,
+.dailyTotal {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.dailyTotal {
+  text-align: right;
+}
+
+.dailyTrack {
+  display: flex;
+  height: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+}
+
+.dailyCorrect,
+.dailyIncorrect {
+  display: block;
+  min-width: 2px;
+  transition: width 240ms ease;
+}
+
+.dailyCorrect {
+  background: linear-gradient(90deg, var(--color-success), var(--color-accent));
+}
+
+.dailyIncorrect {
+  background: var(--color-kicker);
+}
+
+.twoColumnGrid {
+  display: grid;
+  gap: 16px;
+}
+
+.metricItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  background: var(--color-surface-soft);
+}
+
+.metricText,
+.metricMeta {
+  display: grid;
+  gap: 3px;
+}
+
+.metricText {
+  min-width: 0;
+}
+
+.metricText strong,
+.compactItem span {
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  font-weight: 760;
+}
+
+.metricText span,
+.metricMeta span {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.metricMeta {
+  justify-items: end;
+  text-align: right;
+}
+
+.metricMeta strong {
+  color: var(--color-success-text);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.progressTrack {
+  grid-column: 1 / -1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+}
+
+.progressBar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-success), var(--color-accent));
+}
+
+.compactItem {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  background: var(--color-surface-soft);
+}
+
+.compactItem span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compactItem strong {
+  flex: 0 0 auto;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 780;
+}
+
+@media (min-width: 720px) {
+  .screen {
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 3rem;
+  }
+
+  .kpiGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .twoColumnGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

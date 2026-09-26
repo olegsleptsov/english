@@ -4,7 +4,7 @@ import { NavLink, Outlet, useMatch } from 'react-router-dom';
 import { getLessonDetailById, type LessonDetail } from '@/entities/lesson';
 import { routes } from '@/shared/config/routes';
 import { useAppTheme } from '@/shared/lib/theme';
-import { Button, Sheet } from '@/shared/ui';
+import { AnalyticsIcon, Button, Sheet } from '@/shared/ui';
 import { AppNavigation } from '@/widgets/app-navigation';
 
 import styles from './app-layout.module.css';
@@ -40,6 +40,18 @@ export function AppLayout() {
           <span className={styles.headerSpacer} aria-hidden="true" />
         )}
         <div className={styles.headerActions}>
+          <NavLink
+            aria-label="Открыть аналитику"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.headerIconLink} ${styles.headerIconLinkActive}`
+                : styles.headerIconLink
+            }
+            title="Аналитика"
+            to={routes.analytics}
+          >
+            <AnalyticsIcon className={styles.headerIcon} />
+          </NavLink>
           <Button
             aria-label={
               theme === 'light'

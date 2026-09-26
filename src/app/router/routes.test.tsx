@@ -36,6 +36,11 @@ describe('app routes', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Lesson 16' }),
     ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('link', { name: 'Открыть аналитику' }));
+
+    expect(await screen.findByText('Всего ответов')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Analytics' })).toBeInTheDocument();
   });
 
   it('opens route-specific lesson details from the header', async () => {

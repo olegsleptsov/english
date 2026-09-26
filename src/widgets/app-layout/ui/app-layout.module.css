@@ -37,6 +37,44 @@
   transform: translateY(1px);
 }
 
+.headerIconLink {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--color-border-control-strong);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  text-decoration: none;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    transform 160ms ease;
+}
+
+.headerIconLink:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.headerIconLink:active {
+  transform: translateY(1px);
+}
+
+.headerIconLinkActive {
+  border-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+}
+
+.headerIcon {
+  width: 19px;
+  height: 19px;
+}
+
 .themeToggle {
   --g-button-background-color: transparent;
   --g-button-background-color-hover: transparent;

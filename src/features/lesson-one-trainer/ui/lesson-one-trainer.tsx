@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { lessonAnalyticsApi } from '@/entities/lesson-analytics';
 import { verbsApi, type VerbWithLearningStatus } from '@/entities/verb';
 import { routes } from '@/shared/config/routes';
 import { Button, TextInput } from '@/shared/ui';
@@ -57,11 +58,15 @@ export function LessonOneTrainer() {
       return;
     }
 
-    setAnswerStatus(
-      isLessonOneAnswerCorrect(answer, task.expectedAnswer)
-        ? 'correct'
-        : 'incorrect',
-    );
+    const isCorrect = isLessonOneAnswerCorrect(answer, task.expectedAnswer);
+
+    setAnswerStatus(isCorrect ? 'correct' : 'incorrect');
+    void lessonAnalyticsApi.recordLessonAnswer({
+      lessonId: 1,
+      taskId: task.id,
+      verbId: task.verb.id,
+      result: isCorrect ? 'correct' : 'incorrect',
+    });
   }
 
   function handleNextTask() {

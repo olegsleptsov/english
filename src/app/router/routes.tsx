@@ -2,6 +2,7 @@ import { Navigate, type RouteObject } from 'react-router-dom';
 
 import { routes } from '@/shared/config/routes';
 import { AppLayout } from '@/widgets/app-layout';
+import { AnalyticsPage } from '@/pages/analytics';
 import { DictionaryPage } from '@/pages/dictionary';
 import { Lesson01Page } from '@/pages/lesson-01';
 import { Lesson02Page } from '@/pages/lesson-02';
@@ -92,6 +93,10 @@ export const appRoutes: RouteObject[] = [
       {
         path: 'lessons/16',
         element: <Lesson16Page />,
+      },
+      {
+        path: 'analytics',
+        element: <AnalyticsPage />,
       },
       {
         path: 'dictionary',
